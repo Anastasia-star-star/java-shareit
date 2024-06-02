@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface UserStorage {
     Optional<User> addUser(User user);
-    List<UserDto> getUsers();
-    Optional<UserDto> getUserById(Integer id);
-    Optional<UserDto> updateUser(Integer userId, User user);
+    List<User> getUsers();
+    Optional<User> getUserById(Integer id);
+    Optional<User> updateUser(Integer userId, User user);
     boolean deleteUserById(Integer userId);
 }

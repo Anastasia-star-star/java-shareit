@@ -1,10 +1,14 @@
 package ru.practicum.shareit.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDto;
+import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.user.service.UserServiceIM;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -12,33 +16,36 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(path = "/users")
+@Slf4j
 public class UserController {
-    private final UserServiceIM userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserServiceIM userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping
-    public UserDto addUser(@RequestBody UserDto userDto){
+    public User addUser(@Valid @RequestBody UserDto userDto) {
         return userService.addUser(userDto);
     }
 
-    @PatchMapping("/{userId}") UserDto updateUser(@PathVariable Integer id, @RequestBody UserDto userDto){
+    @PatchMapping("/{userId}") User updateUser(@PathVariable(value = "userId") Integer id,
+                                                  @Valid @RequestBody UserDto userDto) {
         return userService.updateUser(id, userDto);
     }
 
     @GetMapping
-    public List<UserDto> getUsers(){
+    public List<User> getUsers(){
         return userService.getUsers();
     }
 
-    @GetMapping("/{userId}") UserDto getUserById(@PathVariable Integer id){
+    @GetMapping("/{userId}") User getUserById(@PathVariable(value = "userId") Integer id){
+        log.info("GET getUserById with PV {}", id);
         return userService.getUserById(id);
     }
 
-    @DeleteMapping("/{userId}") boolean deleteUserById(@PathVariable Integer id){
+    @DeleteMapping("/{userId}") boolean deleteUserById(@PathVariable(value = "userId") Integer id){
         return userService.deleteUser(id);
     }
 }

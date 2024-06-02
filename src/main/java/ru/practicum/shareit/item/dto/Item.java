@@ -9,7 +9,7 @@ import ru.practicum.shareit.user.model.User;
  */
 @Data
 public class Item {
-    private int id;
+    private Integer id;
 
     private String name;
 
