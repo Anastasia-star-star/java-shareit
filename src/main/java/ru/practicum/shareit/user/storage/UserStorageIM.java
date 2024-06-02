@@ -3,13 +3,10 @@ package ru.practicum.shareit.user.storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserDto;
-import ru.practicum.shareit.user.UserMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
@@ -18,15 +15,15 @@ public class UserStorageIM implements UserStorage {
     private Integer id = 1;
 
     @Override
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return users;
     }
 
     @Override
-    public Optional<User> addUser(User user){
+    public Optional<User> addUser(User user) {
         if (users.stream()
                 .filter(u -> u.getEmail().equals(user.getEmail()))
-                .count() > 0){
+                .count() > 0) {
             return Optional.empty();
         }
         user.setId(id++);
@@ -72,12 +69,13 @@ public class UserStorageIM implements UserStorage {
     }
 
     @Override
-    public Optional<User> getUserById(Integer id){
+    public Optional<User> getUserById(Integer id) {
         log.info("Storage getUserById with ID {}", id);
         return users.stream()
                 .filter(user1 -> user1.getId().equals(id))
                 .findFirst();
     }
+
     @Override
     public boolean deleteUserById(Integer userId) {
         for (User checkUser : users) {

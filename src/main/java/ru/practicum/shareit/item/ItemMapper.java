@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item;
 
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.Item;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 public class ItemMapper {
     public static ItemDto itemToItemDto(Item item) {
@@ -24,6 +24,6 @@ public class ItemMapper {
         return item;
     }
 
-   // public static List<ItemDto> getItemsDtoFromItems(List<Item> items) {
-     //   return items.stream().map(ItemMapper::itemToItemDto).collect(Collectors.toList());}
+    // public static List<ItemDto> getItemsDtoFromItems(List<Item> items) {
+    //   return items.stream().map(ItemMapper::itemToItemDto).collect(Collectors.toList());}
 }
