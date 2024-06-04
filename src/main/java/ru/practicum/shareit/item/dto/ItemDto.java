@@ -18,6 +18,7 @@ public class ItemDto {
 
     @NotBlank(message = "Ошибка! название вещи не может быть пустым.")
     private String name;
+
     @NotBlank(message = "Ошибка! Развёрнутое описание вещи не может быть пустым.")
     private String description;
 
