@@ -15,11 +15,11 @@ import java.util.List;
 
 @Repository
 @Slf4j
-public class UserServiceIM implements UserService {
+public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public UserServiceIM(UserStorage userStorage) {
+    public UserServiceImpl(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
