@@ -12,6 +12,7 @@ import java.util.Optional;
 @Slf4j
 public class UserStorageImpl implements UserStorage {
     private final List<User> users = new ArrayList<>();
+
     private Integer id = 1;
 
     @Override
