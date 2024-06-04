@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Repository
 @Slf4j
-public class UserStorageIM implements UserStorage {
-    public List<User> users = new ArrayList<>();
+public class UserStorageImpl implements UserStorage {
+    private final List<User> users = new ArrayList<>();
     private Integer id = 1;
 
     @Override

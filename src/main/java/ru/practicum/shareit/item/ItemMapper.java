@@ -23,7 +23,4 @@ public class ItemMapper {
         item.setOwner(itemDto.getOwner());
         return item;
     }
-
-    // public static List<ItemDto> getItemsDtoFromItems(List<Item> items) {
-    //   return items.stream().map(ItemMapper::itemToItemDto).collect(Collectors.toList());}
 }

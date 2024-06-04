@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
 import static ru.practicum.shareit.item.ItemMapper.itemDtoToItem;
 
 @Repository
-public class ItemStorageIM implements ItemStorage {
-    private UserService userService;
+public class ItemStorageImpl implements ItemStorage {
+    private final UserService userService;
 
     @Autowired
-    public ItemStorageIM(UserService userService) {
+    public ItemStorageImpl(UserService userService) {
         this.userService = userService;
     }
 
-    public HashMap<Integer, ArrayList<Item>> itemsOfUser = new HashMap<>();
-    int idOfItem = 1;
+    private final HashMap<Integer, ArrayList<Item>> itemsOfUser = new HashMap<>();
+    private int idOfItem = 1;
 
     private Integer generateId() {
         return idOfItem++;

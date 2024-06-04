@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.NotFoundByRequestException;
 import ru.practicum.shareit.item.dto.Item;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.storage.ItemStorageIM;
+import ru.practicum.shareit.item.storage.ItemStorageImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @Repository
 public class ItemServiceImpl implements ItemService {
-    private final ItemStorageIM itemStorage;
+    private final ItemStorageImpl itemStorage;
 
     @Autowired
-    public ItemServiceImpl(ItemStorageIM itemStorage) {
+    public ItemServiceImpl(ItemStorageImpl itemStorage) {
         this.itemStorage = itemStorage;
     }
 
