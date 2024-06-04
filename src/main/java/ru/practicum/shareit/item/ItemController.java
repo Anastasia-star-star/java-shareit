@@ -21,17 +21,17 @@ import java.util.Optional;
 public class ItemController {
     private final ItemService itemService;
 
-    private final String XSharerUserId = "X-Sharer-User-Id";
+    private final String xSharerUserId = "X-Sharer-User-Id";
 
     @PostMapping
-    public Item addItem(@RequestHeader(XSharerUserId) Integer userId,
+    public Item addItem(@RequestHeader(xSharerUserId) Integer userId,
                         @Valid @RequestBody ItemDto itemDto) {
         log.info("Adding new item: {}", itemDto);
         return itemService.addItem(userId, itemDto);
     }
 
     @GetMapping
-    public List<Item> getItemOfUserId(@RequestHeader(XSharerUserId) Integer userId) {
+    public List<Item> getItemOfUserId(@RequestHeader(xSharerUserId) Integer userId) {
         log.info("Getting item by user id: {}", userId);
         return itemService.getItemOfUserId(userId);
     }
@@ -49,7 +49,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public Item update(@RequestHeader(XSharerUserId) Integer userId,
+    public Item update(@RequestHeader(xSharerUserId) Integer userId,
                        @PathVariable Integer itemId,
                        @RequestBody ItemDto itemDto) {
         log.info("Updating item of user by item id: {}", itemId);
