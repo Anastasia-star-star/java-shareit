@@ -1,10 +1,11 @@
 package ru.practicum.shareit.user.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.exception.NotFoundByRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.RequestWithoutValueException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -15,18 +16,18 @@ import java.util.List;
 
 @Repository
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserStorage userStorage;
-
     @Autowired
-    public UserServiceImpl(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
+    private final UserStorage userStorage;
 
     @Override
     public User addUser(UserDto userDto) {
-        if (userDto.getEmail() == null) {
-            throw new NotFoundByRequestException("Email is null");
+        if (userDto.getEmail() == null || userDto.getEmail().isBlank()) {
+            throw new RequestWithoutValueException("Email is empty");
+        }
+        if (userDto.getName() == null || userDto.getName().isBlank()) {
+            throw new RequestWithoutValueException("Name is empty");
         }
         return userStorage.addUser(UserMapper.userDtoToUser(userDto))
                 .orElseThrow(() -> new ValidationException("Ошибка создания пользователя"));
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(Integer id) {
+    public boolean deleteUserById(Integer id) {
         return userStorage.deleteUserById(id);
     }
 }

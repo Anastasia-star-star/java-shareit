@@ -5,12 +5,15 @@ import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 /**
  * TODO Sprint add-controllers.
  */
 @Data
 public class Item {
+
+    @Positive
     private Integer id;
 
     @NotBlank
@@ -19,7 +22,6 @@ public class Item {
     @NotBlank
     private String description;
 
-    @NotBlank
     private boolean available;
 
     private User owner;

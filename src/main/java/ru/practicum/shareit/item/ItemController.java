@@ -2,6 +2,8 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.Item;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -19,37 +21,43 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class ItemController {
-    private final ItemService itemService;
 
-    private final String xSharerUserId = "X-Sharer-User-Id";
+    @Autowired
+    private final ItemService itemService;
+    private static final String XSHARERUSERID = "X-Sharer-User-Id";
 
     @PostMapping
-    public Item addItem(@RequestHeader(xSharerUserId) Integer userId,
+    @ResponseStatus(HttpStatus.CREATED)
+    public Item addItem(@RequestHeader(XSHARERUSERID) Integer userId,
                         @Valid @RequestBody ItemDto itemDto) {
         log.info("Adding new item: {}", itemDto);
         return itemService.addItem(userId, itemDto);
     }
 
     @GetMapping
-    public List<Item> getItemOfUserId(@RequestHeader(xSharerUserId) Integer userId) {
+    @ResponseStatus(HttpStatus.OK)
+    public List<Item> getItemOfUserId(@RequestHeader(XSHARERUSERID) Integer userId) {
         log.info("Getting item by user id: {}", userId);
         return itemService.getItemOfUserId(userId);
     }
 
     @GetMapping("/{itemId}")
+    @ResponseStatus(HttpStatus.OK)
     public Optional<Item> getItemById(@PathVariable Integer itemId) {
         log.info("Getting item by id: {}", itemId);
         return itemService.getItemById(itemId);
     }
 
     @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
     public List<Item> searchItem(@RequestParam String text) {
         log.info("Searching item by text: {}", text);
         return itemService.searchItem(text);
     }
 
     @PatchMapping("/{itemId}")
-    public Item update(@RequestHeader(xSharerUserId) Integer userId,
+    @ResponseStatus(HttpStatus.OK)
+    public Item update(@RequestHeader(XSHARERUSERID) Integer userId,
                        @PathVariable Integer itemId,
                        @RequestBody ItemDto itemDto) {
         log.info("Updating item of user by item id: {}", itemId);

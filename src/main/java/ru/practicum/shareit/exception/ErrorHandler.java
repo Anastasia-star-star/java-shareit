@@ -13,21 +13,21 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequestException(final NotFoundByRequestException exception) {
-        log.error("Not found by request exception");
+    public ErrorResponse handleRequestWithoutValueException(final RequestWithoutValueException exception) {
+        log.info("Missed value by request");
         return new ErrorResponse(exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException exception) {
-        log.error("Not found exception");
+        log.info("Value not found");
         return new ErrorResponse(exception.getMessage());
     }
 
-    @Getter
+    @Getter // геттеры необходимы, чтобы Spring Boot мог получить значения полей
     public class ErrorResponse {
-
+        // название ошибки
         private String error;
         private String description;
 

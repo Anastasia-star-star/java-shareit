@@ -1,9 +1,11 @@
 package ru.practicum.shareit.item.storage;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.Item;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.model.User;
@@ -12,16 +14,12 @@ import ru.practicum.shareit.user.service.UserService;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.practicum.shareit.item.ItemMapper.itemDtoToItem;
-
 @Repository
+@RequiredArgsConstructor
 public class ItemStorageImpl implements ItemStorage {
-    private final UserService userService;
 
     @Autowired
-    public ItemStorageImpl(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     private final HashMap<Integer, ArrayList<Item>> itemsOfUser = new HashMap<>();
     private int idOfItem = 1;
@@ -36,7 +34,7 @@ public class ItemStorageImpl implements ItemStorage {
 
         itemDto.setOwner(owner);
         itemDto.setId(generateId());
-        Item item = itemDtoToItem(itemDto);
+        Item item = ItemMapper.itemDtoToItem(itemDto);
         if (itemsOfUser.containsKey(userId)) {
             itemsOfUser.get(userId).add(item);
         } else {
@@ -85,10 +83,10 @@ public class ItemStorageImpl implements ItemStorage {
                 .filter(item -> item.getId().equals(itemId))
                 .findFirst()
                 .orElseThrow(() -> new ValidationException("Id of item not found"));
-        if (itemDto.getName() != null) {
+        if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
             itemN.setName(itemDto.getName());
         }
-        if (itemDto.getDescription() != null) {
+        if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
             itemN.setDescription(itemDto.getDescription());
         }
         if (itemDto.getAvailable() != null) {

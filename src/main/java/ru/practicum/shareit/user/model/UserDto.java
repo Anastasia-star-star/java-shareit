@@ -11,7 +11,8 @@ public class UserDto {
 
     @NotBlank
     private String name;
-    @NotEmpty(message = "Ошибка! e-mail не может быть пустым.")
+
+    @NotBlank(message = "Ошибка! e-mail не может быть пустым.")
     @Email(message = "Ошибка! Неверный e-mail.")
     private String email;
 
