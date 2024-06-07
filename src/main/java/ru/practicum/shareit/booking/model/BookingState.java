@@ -2,9 +2,7 @@ package ru.practicum.shareit.booking.model;
 
 import ru.practicum.shareit.exception.ArgumentException;
 
-import javax.xml.bind.ValidationException;
-
-public enum State {
+public enum BookingState {
     WAITING,
     ALL,
     CURRENT,
@@ -12,12 +10,12 @@ public enum State {
     FUTURE,
     REJECTED;
 
-    public static State getState(String text) {
+    public static BookingState getState(String text) {
         if ((text == null) || text.isBlank()) {
-            return State.ALL;
+            return BookingState.ALL;
         }
         try {
-            return State.valueOf(text.toUpperCase().trim());
+            return BookingState.valueOf(text.toUpperCase().trim());
         } catch (Exception e) {
             throw new ArgumentException(String.format("Unknown state: %s", text));
         }

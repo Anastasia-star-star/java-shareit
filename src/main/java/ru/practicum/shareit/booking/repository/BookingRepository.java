@@ -16,6 +16,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Modifying
     @Query("UPDATE Booking b SET b.status = :status WHERE b.id = :bookingId")
     void updateStatus(@Param("status") BookingStatus status, @Param("bookingId") Long bookingId);
+
     List<Booking> getAllByBookerIdAndStartAfter(long bookerId, LocalDateTime start, Sort sort);
 
     List<Booking> getAllByBookerIdAndEndBefore(long bookerId, LocalDateTime end, Sort sort);
@@ -53,5 +54,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByItemIdAndStatus(long itemId, BookingStatus status);
 
     Optional<Booking> findFirstByItemIdAndBookerIdAndStatusAndEndBefore(long itemId, long bookerId,
-                                                                             BookingStatus status, LocalDateTime end);
+                                                                        BookingStatus status, LocalDateTime end);
 }

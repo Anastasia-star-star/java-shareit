@@ -8,7 +8,7 @@ import ru.practicum.shareit.booking.dto.InpBookingDto;
 import ru.practicum.shareit.booking.dto.OutBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.booking.model.State;
+import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.AccessException;
 import ru.practicum.shareit.exception.InternalServerError;
@@ -128,11 +128,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OutBookingDto> getBookingsOfBooker(State state, Long bookerId) {
+    public List<OutBookingDto> getBookingsOfBooker(BookingState bookingState, Long bookerId) {
         getUserById(bookerId);
         Sort sort = Sort.by(Sort.Direction.DESC, "start");
         List<Booking> bookings;
-        switch (state) {
+        switch (bookingState) {
             case WAITING:
                 bookings = bookingRepository.getAllByBookerIdAndStatus(bookerId, BookingStatus.WAITING, sort);
                 break;
@@ -156,11 +156,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OutBookingDto> getBookingsOfOwner(State state, Long ownerId) {
+    public List<OutBookingDto> getBookingsOfOwner(BookingState bookingState, Long ownerId) {
         getUserById(ownerId);
         Sort sort = Sort.by(Sort.Direction.DESC, "start");
         List<Booking> bookings;
-        switch (state) {
+        switch (bookingState) {
             case WAITING:
                 bookings = bookingRepository.findAllByOwnerIdAndStatus(ownerId, BookingStatus.WAITING);
                 break;
