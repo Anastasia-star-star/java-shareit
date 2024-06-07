@@ -14,6 +14,7 @@ public enum BookingState {
         if ((text == null) || text.isBlank()) {
             return BookingState.ALL;
         }
+
         try {
             return BookingState.valueOf(text.toUpperCase().trim());
         } catch (Exception e) {
