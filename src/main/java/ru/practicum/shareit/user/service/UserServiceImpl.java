@@ -2,60 +2,80 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.RequestWithoutValueException;
-import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.user.UserMapper;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserDto;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.Map;
 
-@Repository
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private final UserStorage userStorage;
+    private final UserRepository userRepository;
 
     @Override
-    public User addUser(UserDto userDto) {
-        if (userDto.getEmail() == null || userDto.getEmail().isBlank()) {
-            throw new RequestWithoutValueException("Email is empty");
+    public UserDto add(User user) {
+        return UserMapper.toUserDto(userRepository.save(user));
+    }
+
+    @Override
+    @Transactional
+    public UserDto update(User user) {
+        long id = user.getId();
+        getUserById(id);
+        return UserMapper.toUserDto(userRepository.save(user));
+    }
+
+    @Transactional
+    @Override
+    public UserDto patchUpdate(long id, Map<String, String> updates) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id %d not found", id)));
+        if (updates.containsKey("name")) {
+            String name = updates.get("name");
+            user.setName(name.trim());
         }
-        if (userDto.getName() == null || userDto.getName().isBlank()) {
-            throw new RequestWithoutValueException("Name is empty");
+        if (updates.containsKey("email")) {
+            String email = updates.get("email");
+            user.setEmail(email.trim());
         }
-        return userStorage.addUser(UserMapper.userDtoToUser(userDto))
-                .orElseThrow(() -> new ValidationException("Ошибка создания пользователя"));
+        userRepository.save(user);
+        return UserMapper.toUserDto(user);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public User getUserById(long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id %d not found", id)));
     }
 
     @Override
-    public List<User> getUsers() {
-        return userStorage.getUsers();
+    public UserDto getUserDtoById(long id) {
+        return UserMapper.toUserDto(getUserById(id));
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public User getUserById(Integer id) {
-        log.info("Service getUserById with ID {}", id);
-        if (id == null || id <= 0) {
-            throw new ValidationException("ID is null or negative");
-        }
-        return userStorage.getUserById(id).orElseThrow(() ->
-                new NotFoundException("Не найден пользователь с id = " + id));
+    public List<UserDto> getAll() {
+        return UserMapper.toUserDtoList(userRepository.findAll());
     }
 
+    @Transactional
     @Override
-    public User updateUser(Integer id, UserDto userDto) {
-        return userStorage.updateUser(id, UserMapper.userDtoToUser(userDto))
-                .orElseThrow(() -> new ValidationException("Ошибка обновления пользователя"));
+    public void delete(long userId) {
+        userRepository.deleteById(userId);
     }
 
+    @Transactional
     @Override
-    public boolean deleteUserById(Integer id) {
-        return userStorage.deleteUserById(id);
+    public void deleteAll() {
+        userRepository.deleteAll();
     }
 }
