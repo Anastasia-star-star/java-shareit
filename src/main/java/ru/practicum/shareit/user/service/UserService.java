@@ -9,7 +9,7 @@ import java.util.Map;
 public interface UserService {
     UserDto add(User user);
 
-    UserDto update(User user);
+    UserDto updateUser(User user);
 
     UserDto patchUpdate(long id, Map<String, String> updates);
 
@@ -17,9 +17,9 @@ public interface UserService {
 
     UserDto getUserDtoById(long id);
 
-    List<UserDto> getAll();
+    List<UserDto> getAllUsers();
 
-    void delete(long userId);
+    void deleteUser(long userId);
 
     void deleteAll();
 

@@ -19,6 +19,7 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public UserDto add(User user) {
         return UserMapper.toUserDto(userRepository.save(user));
@@ -26,10 +27,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto update(User user) {
+    public UserDto updateUser(User user) {
         long id = user.getId();
         getUserById(id);
-        return UserMapper.toUserDto(userRepository.save(user));
+        return UserMapper.toUserDto(user);
     }
 
     @Transactional
@@ -45,7 +46,6 @@ public class UserServiceImpl implements UserService {
             String email = updates.get("email");
             user.setEmail(email.trim());
         }
-        userRepository.save(user);
         return UserMapper.toUserDto(user);
     }
 
@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException(String.format("User with id %d not found", id)));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDto getUserDtoById(long id) {
         return UserMapper.toUserDto(getUserById(id));
@@ -63,13 +64,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserDto> getAll() {
+    public List<UserDto> getAllUsers() {
         return UserMapper.toUserDtoList(userRepository.findAll());
     }
 
     @Transactional
     @Override
-    public void delete(long userId) {
+    public void deleteUser(long userId) {
         userRepository.deleteById(userId);
     }
 

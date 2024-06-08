@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ItemService {
-    ItemDto add(long ownerId, Item item);
+    ItemDto addItem(long ownerId, Item item);
 
     ItemDto update(Long ownerId, Long itemId, Map<String, String> updates);
 

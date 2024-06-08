@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
@@ -46,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public ItemDto add(long ownerId, Item item) {
+    public ItemDto addItem(long ownerId, Item item) {
         User owner = getUserById(ownerId);
         item.setOwner(owner);
         return ItemMapper.toItemDto(itemRepository.save(item));
@@ -73,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
         if (updates.containsKey("available")) {
             item.setAvailable(Boolean.valueOf(updates.get("available")));
         }
-        return ItemMapper.toItemDto(itemRepository.save(item));
+        return ItemMapper.toItemDto(item);
     }
 
     @Transactional(readOnly = true)
@@ -173,6 +174,7 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.deleteAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ItemDto> searchItems(Long userId, String query) {
         if (query == null || query.isBlank()) {

@@ -14,7 +14,7 @@ public class InpBookingDto {
     @NotNull
     private Long itemId;
 
-    @NotNull()
+    @NotNull
     @FutureOrPresent(message = "Время должно быть в настоящем или будущем")
     private LocalDateTime start;
 

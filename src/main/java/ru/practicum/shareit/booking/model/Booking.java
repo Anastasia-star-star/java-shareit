@@ -5,6 +5,8 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,9 +22,11 @@ public class Booking {
     private Long id;
 
     @Column(name = "start_booking")
+    @NotNull
     private LocalDateTime start;
 
     @Column(name = "end_booking")
+    @NotNull
     private LocalDateTime end;
 
     @ToString.Exclude

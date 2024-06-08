@@ -32,11 +32,13 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
+    @Transactional(readOnly = true)
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format("User with id %d not found", userId)));
     }
 
+    @Transactional(readOnly = true)
     private Item getItemById(Long itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item with id %d not found", itemId)));
@@ -84,9 +86,10 @@ public class BookingServiceImpl implements BookingService {
         BookingStatus bookingStatus = approve ? BookingStatus.APPROVED : BookingStatus.REJECTED;
         booking.setStatus(bookingStatus);
         bookingRepository.updateStatus(bookingStatus, bookingId);
-        return toOutBookingDto(bookingRepository.save(booking));
+        return toOutBookingDto(booking);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Booking getBookingById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
@@ -95,6 +98,7 @@ public class BookingServiceImpl implements BookingService {
         return booking;
     }
 
+    @Transactional
     private void checkAccessToBooking(Booking booking, Long userId, boolean accessForBooker) {
         User booker = booking.getBooker();
         if (booker == null) {
@@ -120,9 +124,13 @@ public class BookingServiceImpl implements BookingService {
                 userId, booking.getId()));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public OutBookingDto getBookingDtoById(Long bookingId, Long userId) {
         Booking booking = getBookingById(bookingId, userId);
+        if (booking == null){
+            throw new NotFoundException("Booking not found");
+        }
         return toOutBookingDto(booking);
     }
 

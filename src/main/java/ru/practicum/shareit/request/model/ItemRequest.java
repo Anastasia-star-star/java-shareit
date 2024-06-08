@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
@@ -18,6 +19,7 @@ public class ItemRequest {
     private Long id;
 
     @Column(name = "description")
+    @NotBlank
     private String description;
 
     @ManyToOne(cascade = CascadeType.ALL)
