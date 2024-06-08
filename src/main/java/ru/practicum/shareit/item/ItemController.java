@@ -22,7 +22,6 @@ public class ItemController {
     private static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final ItemService itemService;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ItemDto addItem(@RequestHeader(X_SHARER_USER_ID) long ownerId,
                           @Valid @RequestBody @NotNull ItemDto itemDto) {
@@ -64,7 +63,6 @@ public class ItemController {
         itemService.delete(ownerId, itemId);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader(X_SHARER_USER_ID) long userId,
                                  @PathVariable long itemId,

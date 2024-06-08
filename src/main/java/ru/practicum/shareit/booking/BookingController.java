@@ -20,7 +20,6 @@ public class BookingController {
     private static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final BookingService bookingService;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public OutBookingDto addBooking(@RequestHeader(X_SHARER_USER_ID) long userId,
                                     @Valid @RequestBody InpBookingDto booking) {

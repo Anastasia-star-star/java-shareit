@@ -20,7 +20,6 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public UserDto add(@Valid @RequestBody @NotNull UserDto user) {
         log.info("Adding new user");
