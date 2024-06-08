@@ -28,7 +28,6 @@ public class BookingController {
         return bookingService.addBooking(booking, userId);
     }
 
-    @ResponseStatus(HttpStatus.CHECKPOINT)
     @PatchMapping("/{bookingId}")
     public OutBookingDto approveBooking(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                 @PathVariable Long bookingId,
@@ -37,7 +36,6 @@ public class BookingController {
         return bookingService.approveBooking(bookingId, userId, approved);
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
     @GetMapping("/{bookingId}")
     public OutBookingDto getBookingDtoById(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                  @PathVariable Long bookingId) {
@@ -45,7 +43,6 @@ public class BookingController {
         return bookingService.getBookingDtoById(bookingId, userId);
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
     @GetMapping
     public List<OutBookingDto> getBookingsOfUser(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                                  @RequestParam(defaultValue = "ALL") String state) {
@@ -53,7 +50,6 @@ public class BookingController {
         return bookingService.getBookingsOfBooker(BookingState.getState(state), userId);
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
     @GetMapping("/owner")
     public List<OutBookingDto> getBookingsOfOwner(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                                   @RequestParam(defaultValue = "ALL") String state) {

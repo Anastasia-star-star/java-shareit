@@ -22,6 +22,7 @@ public class ItemController {
     private static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final ItemService itemService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ItemDto addItem(@RequestHeader(X_SHARER_USER_ID) long ownerId,
                           @Valid @RequestBody @NotNull ItemDto itemDto) {
@@ -43,14 +44,12 @@ public class ItemController {
         return itemService.getItemDtoById(itemId, userId);
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
     @GetMapping
     public List<ItemDto> getAllUserItems(@RequestHeader(X_SHARER_USER_ID) long ownerId) {
         log.info("Getting all users items");
         return itemService.getAllUserItems(ownerId);
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
     @GetMapping("/search")
     public List<ItemDto> searchItems(@RequestHeader(X_SHARER_USER_ID) long userId,
                                      @RequestParam(name = "text") String text) {
@@ -58,7 +57,6 @@ public class ItemController {
         return itemService.searchItems(userId, text);
     }
 
-    @ResponseStatus(HttpStatus.GONE)
     @DeleteMapping("/{itemId}")
     public void delete(@RequestHeader(X_SHARER_USER_ID) long ownerId,
                        @PathVariable long itemId) {
