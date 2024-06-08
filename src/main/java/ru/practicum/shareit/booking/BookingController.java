@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.InpBookingDto;
 import ru.practicum.shareit.booking.dto.OutBookingDto;
@@ -29,15 +28,15 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public OutBookingDto approveBooking(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                @PathVariable Long bookingId,
-                                @RequestParam boolean approved) {
+                                        @PathVariable Long bookingId,
+                                        @RequestParam boolean approved) {
         log.info("Updating booking");
         return bookingService.approveBooking(bookingId, userId, approved);
     }
 
     @GetMapping("/{bookingId}")
     public OutBookingDto getBookingDtoById(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                 @PathVariable Long bookingId) {
+                                           @PathVariable Long bookingId) {
         log.info("Getting booking");
         return bookingService.getBookingDtoById(bookingId, userId);
     }

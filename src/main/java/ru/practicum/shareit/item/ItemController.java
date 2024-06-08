@@ -2,7 +2,6 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -24,7 +23,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto addItem(@RequestHeader(X_SHARER_USER_ID) long ownerId,
-                          @Valid @RequestBody @NotNull ItemDto itemDto) {
+                           @Valid @RequestBody @NotNull ItemDto itemDto) {
         log.info("Adding new item");
         return itemService.addItem(ownerId, ItemMapper.toItem(itemDto));
     }
@@ -38,7 +37,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDto getItemDtoById(@RequestHeader(X_SHARER_USER_ID) long userId,
-                           @PathVariable long itemId) {
+                                  @PathVariable long itemId) {
         log.info("Getting item DTO by Id");
         return itemService.getItemDtoById(itemId, userId);
     }
