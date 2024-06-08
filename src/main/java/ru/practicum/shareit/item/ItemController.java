@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -42,12 +43,14 @@ public class ItemController {
         return itemService.getItemDtoById(itemId, userId);
     }
 
+    @ResponseStatus(HttpStatus.FOUND)
     @GetMapping
     public List<ItemDto> getAllUserItems(@RequestHeader(X_SHARER_USER_ID) long ownerId) {
         log.info("Getting all users items");
         return itemService.getAllUserItems(ownerId);
     }
 
+    @ResponseStatus(HttpStatus.FOUND)
     @GetMapping("/search")
     public List<ItemDto> searchItems(@RequestHeader(X_SHARER_USER_ID) long userId,
                                      @RequestParam(name = "text") String text) {
@@ -55,6 +58,7 @@ public class ItemController {
         return itemService.searchItems(userId, text);
     }
 
+    @ResponseStatus(HttpStatus.GONE)
     @DeleteMapping("/{itemId}")
     public void delete(@RequestHeader(X_SHARER_USER_ID) long ownerId,
                        @PathVariable long itemId) {
@@ -62,6 +66,7 @@ public class ItemController {
         itemService.delete(ownerId, itemId);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader(X_SHARER_USER_ID) long userId,
                                  @PathVariable long itemId,
