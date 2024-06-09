@@ -25,7 +25,6 @@ public class ItemController {
     private ItemService itemService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ItemDtoOut add(@RequestHeader(X_SHARER_USER_ID) Long userId,
                           @Valid @RequestBody ItemDto itemDto) {
         log.info("POST Запрос на добавление пользователем с id = {} предмета {}", userId, itemDto.toString());
@@ -33,7 +32,6 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
     public ItemDtoOut update(@RequestHeader(X_SHARER_USER_ID) Long userId,
                              @RequestBody ItemDto itemDto,
                              @PathVariable Long itemId) {
@@ -42,7 +40,6 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
     public ItemDtoOut getItemById(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                   @PathVariable("itemId")
                                   Long itemId) {
@@ -51,7 +48,6 @@ public class ItemController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<ItemDtoOut> getAll(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
                                    @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size
@@ -61,7 +57,6 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    @ResponseStatus(HttpStatus.OK)
     public List<ItemDtoOut> search(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                    @RequestParam(name = "text") String text,
                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
@@ -71,7 +66,6 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    @ResponseStatus(HttpStatus.OK)
     public CommentDtoOut createComment(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                        @Validated @RequestBody CommentDto commentDto,
                                        @PathVariable Long itemId) {
