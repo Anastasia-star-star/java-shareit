@@ -147,7 +147,6 @@ public class ItemServiceImpl implements ItemService {
                 .collect(toList());
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public List<ItemDtoOut> search(Long userId, String text, Integer from, Integer size) {
@@ -192,6 +191,7 @@ public class ItemServiceImpl implements ItemService {
                 .map(CommentMapper::toCommentDtoOut)
                 .collect(toList());
     }
+
     @Transactional(readOnly = true)
     private BookingDtoOut getLastBooking(List<BookingDtoOut> bookings, LocalDateTime time) {
         if (bookings == null || bookings.isEmpty()) {

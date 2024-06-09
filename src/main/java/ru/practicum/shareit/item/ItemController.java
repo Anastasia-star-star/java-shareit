@@ -44,8 +44,8 @@ public class ItemController {
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public ItemDtoOut getItemById(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                               @PathVariable("itemId")
-                               Long itemId) {
+                                  @PathVariable("itemId")
+                                  Long itemId) {
         log.info("GET Запрос на получение предмета с id = {} пользователем с id = {} ", itemId, userId);
         return itemService.getItemById(userId, itemId);
     }
@@ -53,8 +53,8 @@ public class ItemController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDtoOut> getAll(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
-                                    @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size
+                                   @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                   @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size
     ) {
         log.info("GET Запрос на получение предметов пользователя с id = {}", userId);
         return itemService.getAll(userId, from, size);
@@ -63,9 +63,9 @@ public class ItemController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDtoOut> search(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                        @RequestParam(name = "text") String text,
-                                        @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
-                                        @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
+                                   @RequestParam(name = "text") String text,
+                                   @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                   @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
         log.info("GET Запрос на поиск предметов c текстом = {}", text);
         return itemService.search(userId, text, from, size);
     }

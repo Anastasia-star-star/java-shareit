@@ -33,9 +33,9 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingDtoOut update(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                      @PathVariable("bookingId")
-                                      Long bookingId,
-                                      @RequestParam(name = "approved") Boolean approved) {
+                                @PathVariable("bookingId")
+                                Long bookingId,
+                                @RequestParam(name = "approved") Boolean approved) {
         log.info("Запрос на обновление статуса бронирования вещи от владельца с id: {}", userId);
         return bookingService.update(userId, bookingId, approved);
     }
@@ -44,7 +44,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public BookingDtoOut getBookingByUserId(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                             @PathVariable("bookingId")
-                                         Long bookingId) {
+                                            Long bookingId) {
         log.info("GET запрос на получение данных о  бронировании от пользователя с id: {}", userId);
         return bookingService.getBookingByUserId(userId, bookingId);
     }
@@ -52,9 +52,9 @@ public class BookingController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDtoOut> getAll(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                       @RequestParam(value = "state", defaultValue = "ALL") String bookingState,
-                                       @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
-                                       @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
+                                      @RequestParam(value = "state", defaultValue = "ALL") String bookingState,
+                                      @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                      @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
         log.info("GET запрос на получение списка всех бронирований текущего пользователя с id: {} и статусом {}", userId, bookingState);
         return bookingService.getAll(userId, bookingState, from, size);
     }
