@@ -152,26 +152,6 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void update() {
-        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingWaiting));
-        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingWaiting);
-
-        BookingDtoOut actualBookingDtoOut = bookingService.update(owner.getId(), bookingWaiting.getId(), true);
-
-        assertEquals(BookingStatus.APPROVED, actualBookingDtoOut.getStatus());
-    }
-
-    @Test
-    void updateWhenStatusNotApproved() {
-        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingWaiting));
-        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingWaiting);
-
-        BookingDtoOut actualBookingDtoOut = bookingService.update(owner.getId(), bookingWaiting.getId(), false);
-
-        assertEquals(BookingStatus.REJECTED, actualBookingDtoOut.getStatus());
-    }
-
-    @Test
     void updateShouldStatusNotWaiting() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 

@@ -26,7 +26,6 @@ public class ItemRequestController {
     private final ItemRequestService requestService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ItemRequestDtoOut add(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                  @Valid @RequestBody ItemRequestDto requestDto) {
         log.info("Добавление запроса");
@@ -34,14 +33,12 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<ItemRequestDtoOut> getUserRequests(@RequestHeader(X_SHARER_USER_ID) Long userId) {
         log.info("Получение пользователя");
         return requestService.getUserRequests(userId);
     }
 
     @GetMapping("/all")
-    @ResponseStatus(HttpStatus.OK)
     public List<ItemRequestDtoOut> getAllRequests(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                                   @RequestParam(name = "from", defaultValue = "0") @Min(0) Integer from,
                                                   @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
@@ -50,7 +47,6 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    @ResponseStatus(HttpStatus.OK)
     public ItemRequestDtoOut getRequestById(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                  @PathVariable Long requestId) {
         log.info("Получение запроса по Id");
