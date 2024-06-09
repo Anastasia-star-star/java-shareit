@@ -1,29 +1,34 @@
 package ru.practicum.shareit.item.dto;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.user.model.User;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
-
-/**
- * TODO Sprint add-controllers.
- */
+import javax.validation.constraints.NotNull;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ItemDto {
 
-    @Positive
-    private Integer id;
-
-    @NotBlank(message = "Ошибка! название вещи не может быть пустым.")
+    @NotBlank
     private String name;
 
-    @NotBlank(message = "Ошибка! Развёрнутое описание вещи не может быть пустым.")
+    @NotBlank
     private String description;
 
+    @NotNull
     private Boolean available;
 
-    private User owner;
+    private Long requestId;
 
+    public ItemDto(String name, String description, Boolean available) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
 }
