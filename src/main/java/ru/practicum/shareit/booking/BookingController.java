@@ -24,7 +24,6 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public BookingDtoOut add(@RequestHeader(X_SHARER_USER_ID) Long userId,
                              @Valid @RequestBody BookingDto bookingDto) {
         log.info("Запрос на создание нового бронирования вещи от пользователя c id: {} ", userId);
@@ -41,7 +40,6 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    @ResponseStatus(HttpStatus.OK)
     public BookingDtoOut getBookingByUserId(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                             @PathVariable("bookingId")
                                             Long bookingId) {
@@ -50,7 +48,6 @@ public class BookingController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<BookingDtoOut> getAll(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                       @RequestParam(value = "state", defaultValue = "ALL") String bookingState,
                                       @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
@@ -60,7 +57,6 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    @ResponseStatus(HttpStatus.OK)
     public List<BookingDtoOut> getAllOwner(@RequestHeader(X_SHARER_USER_ID) Long ownerId,
                                            @RequestParam(value = "state", defaultValue = "ALL") String bookingState,
                                            @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
