@@ -1,43 +1,63 @@
 package ru.practicum.shareit.exception;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice("ru.practicum.shareit")
 public class ErrorHandler {
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(ValidationException e) {
+        String strError = String.format("Validation Error: %s", e.getMessage());
+        log.error(strError);
+        return new ErrorResponse(strError);
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleRequestWithoutValueException(final RequestWithoutValueException exception) {
-        log.info("Missed value by request");
-        return new ErrorResponse(exception.getMessage());
+    public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        String strError = e.getMessage();
+        String strSubString = "default message";
+        int index = strError.lastIndexOf(strSubString);
+        String strMessage = index == 0 ? "" : strError.substring(index + strSubString.length());
+        log.error(strMessage);
+        return new ErrorResponse(strError);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundException(final NotFoundException exception) {
-        log.info("Value not found");
-        return new ErrorResponse(exception.getMessage());
+    public ErrorResponse handleNotFoundException(NotFoundException e) {
+        String strError = String.format("Required object wasn't found: %s", e.getMessage());
+        log.error(strError);
+        return new ErrorResponse(strError);
     }
 
-    @Getter // геттеры необходимы, чтобы Spring Boot мог получить значения полей
-    public class ErrorResponse {
-        // название ошибки
-        private String error;
-        private String description;
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleAccessException(AccessException e) {
+        String strError = String.format("Access denied: %s", e.getMessage());
+        log.error(strError);
+        return new ErrorResponse(strError);
+    }
 
-        public ErrorResponse(String error) {
-            this.error = error;
-        }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleArgumentException(ArgumentException e) {
+        String strError = String.format("Bad Request: %s", e.getMessage());
+        log.error(strError);
+        return new ErrorResponse(e.getMessage());
+    }
 
-        public ErrorResponse(String error, String description) {
-            this.error = error;
-            this.description = description;
-        }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(Throwable e) {
+        String strError = String.format("Exception has occurred: %s", e.getMessage());
+        log.error(strError);
+        return new ErrorResponse(strError);
     }
 }

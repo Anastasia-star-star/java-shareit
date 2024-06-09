@@ -2,65 +2,71 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.Item;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
-/**
- * TODO Sprint add-controllers.
- */
+@Slf4j
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
-@Slf4j
 public class ItemController {
-
-    @Autowired
+    private static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final ItemService itemService;
-    private static final String XSHARERUSERID = "X-Sharer-User-Id";
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Item addItem(@RequestHeader(XSHARERUSERID) Integer userId,
-                        @Valid @RequestBody ItemDto itemDto) {
-        log.info("Adding new item: {}", itemDto);
-        return itemService.addItem(userId, itemDto);
-    }
-
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Item> getItemOfUserId(@RequestHeader(XSHARERUSERID) Integer userId) {
-        log.info("Getting item by user id: {}", userId);
-        return itemService.getItemOfUserId(userId);
-    }
-
-    @GetMapping("/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    public Optional<Item> getItemById(@PathVariable Integer itemId) {
-        log.info("Getting item by id: {}", itemId);
-        return itemService.getItemById(itemId);
-    }
-
-    @GetMapping("/search")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Item> searchItem(@RequestParam String text) {
-        log.info("Searching item by text: {}", text);
-        return itemService.searchItem(text);
+    public ItemDto addItem(@RequestHeader(X_SHARER_USER_ID) long ownerId,
+                           @Valid @RequestBody @NotNull ItemDto itemDto) {
+        log.info("Adding new item");
+        return itemService.addItem(ownerId, ItemMapper.toItem(itemDto));
     }
 
     @PatchMapping("/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    public Item update(@RequestHeader(XSHARERUSERID) Integer userId,
-                       @PathVariable Integer itemId,
-                       @RequestBody ItemDto itemDto) {
-        log.info("Updating item of user by item id: {}", itemId);
-        return itemService.update(userId, itemId, itemDto);
+    public ItemDto update(@RequestHeader(X_SHARER_USER_ID) long ownerId, @PathVariable long itemId,
+                          @RequestBody @NotNull Map<String, String> updates) {
+        log.info("Updating item");
+        return itemService.update(ownerId, itemId, updates);
+    }
+
+    @GetMapping("/{itemId}")
+    public ItemDto getItemDtoById(@RequestHeader(X_SHARER_USER_ID) long userId,
+                                  @PathVariable long itemId) {
+        log.info("Getting item DTO by Id");
+        return itemService.getItemDtoById(itemId, userId);
+    }
+
+    @GetMapping
+    public List<ItemDto> getAllUserItems(@RequestHeader(X_SHARER_USER_ID) long ownerId) {
+        log.info("Getting all users items");
+        return itemService.getAllUserItems(ownerId);
+    }
+
+    @GetMapping("/search")
+    public List<ItemDto> searchItems(@RequestHeader(X_SHARER_USER_ID) long userId,
+                                     @RequestParam(name = "text") String text) {
+        log.info("Searching item");
+        return itemService.searchItems(userId, text);
+    }
+
+    @DeleteMapping("/{itemId}")
+    public void delete(@RequestHeader(X_SHARER_USER_ID) long ownerId,
+                       @PathVariable long itemId) {
+        log.info("Deleting item");
+        itemService.delete(ownerId, itemId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@RequestHeader(X_SHARER_USER_ID) long userId,
+                                 @PathVariable long itemId,
+                                 @Valid @RequestBody CommentDto commentDto) {
+        log.info("Adding comment");
+        return itemService.addComment(userId, itemId, commentDto);
     }
 }

@@ -2,58 +2,57 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserDto;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping(path = "/users")
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User addUser(@Valid @RequestBody UserDto userDto) {
-        log.info("Adding new user: {} ", userDto);
-        return userService.addUser(userDto);
+    public UserDto add(@Valid @RequestBody @NotNull UserDto user) {
+        log.info("Adding new user");
+        return userService.add(UserMapper.toUser(user));
     }
 
-    @PatchMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    User updateUser(@PathVariable(value = "userId") Integer id,
-                    @RequestBody UserDto userDto) {
-        log.info("Updating user: {} ", userDto);
-        return userService.updateUser(id, userDto);
+    @PutMapping
+    public UserDto updateUser(@Valid @RequestBody @NotNull UserDto user) {
+        log.info("Updating new user");
+        return userService.updateUser(UserMapper.toUser(user));
+    }
+
+    @PatchMapping("{id}")
+    public UserDto patchUpdate(@PathVariable long id,
+                               @RequestBody Map<String, String> updates) {
+        log.info("Patching new user");
+        return userService.patchUpdate(id, updates);
+    }
+
+    @GetMapping("{id}")
+    public UserDto getUserDtoById(@PathVariable(required = false) long id) {
+        log.info("Getting user");
+        return userService.getUserDtoById(id);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<User> getUsers() {
-        log.info("Getting users");
-        return userService.getUsers();
+    public List<UserDto> getAllUsers() {
+        log.info("Getting all users");
+        return userService.getAllUsers();
     }
 
-    @GetMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    User getUserById(@PathVariable(value = "userId") Integer id) {
-        log.info("GET getUserById with PV {}", id);
-        return userService.getUserById(id);
-    }
-
-    @DeleteMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    boolean deleteUserById(@PathVariable(value = "userId") Integer userId) {
-        log.info("Delete user by Id: {} ", userId);
-        return userService.deleteUserById(userId);
+    @DeleteMapping("{id}")
+    public void deleteUser(@PathVariable long id) {
+        log.info("Deleting user");
+        userService.deleteUser(id);
     }
 }
