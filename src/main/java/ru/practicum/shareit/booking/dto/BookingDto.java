@@ -4,23 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.item.dto.ItemDto;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BookingDto {
+    @NotNull
+    private Long itemId;
 
-    private long id;
-
+    @NotNull
+    @FutureOrPresent
     private LocalDateTime start;
 
+    @NotNull
+    @Future
     private LocalDateTime end;
 
-    private ItemDto item;
-
-    private long bookerId;
 }

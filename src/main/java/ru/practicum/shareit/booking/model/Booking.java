@@ -2,47 +2,54 @@ package ru.practicum.shareit.booking.model;
 
 import lombok.*;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
-@Entity
-@Builder
-@Table(name = "bookings")
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "bookings", schema = "public")
 public class Booking {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "start_booking")
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    @ToString.Exclude
+    @NotNull
+    private Item item;
+
+    @Column(name = "start_date")
     @NotNull
     private LocalDateTime start;
 
-    @Column(name = "end_booking")
+    @Column(name = "end_date")
     @NotNull
     private LocalDateTime end;
 
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
-
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "booker_id")
+    @ToString.Exclude
+    @NotNull
     private User booker;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private BookingStatus status;
+
+    public Booking(Item item, LocalDateTime start, LocalDateTime end, User booker, BookingStatus status) {
+        this.item = item;
+        this.start = start;
+        this.end = end;
+        this.booker = booker;
+        this.status = status;
+    }
 }
-
-
-
-
-
