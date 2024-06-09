@@ -88,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public ItemDtoOut getItemById(Long userId, Long itemId) {
         userService.getById(userId);
         Optional<Item> itemGet = itemRepository.findById(itemId);
@@ -114,7 +114,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ItemDtoOut> getAll(Long userId, Integer from, Integer size) {
         UserDto owner = userService.getById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
@@ -145,7 +145,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ItemDtoOut> search(Long userId, String text, Integer from, Integer size) {
         userService.getById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
