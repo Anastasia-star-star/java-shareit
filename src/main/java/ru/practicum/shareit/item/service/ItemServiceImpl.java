@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -88,9 +87,8 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDtoOut(item);
     }
 
-
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public ItemDtoOut getItemById(Long userId, Long itemId) {
         userService.getById(userId);
         Optional<Item> itemGet = itemRepository.findById(itemId);
@@ -115,9 +113,8 @@ public class ItemServiceImpl implements ItemService {
         return itemDtoOut;
     }
 
-
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ItemDtoOut> getAll(Long userId, Integer from, Integer size) {
         UserDto owner = userService.getById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
