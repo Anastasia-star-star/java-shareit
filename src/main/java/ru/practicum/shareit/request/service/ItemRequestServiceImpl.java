@@ -50,7 +50,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Transactional(readOnly = true)
     public List<ItemRequestDtoOut> getAllRequests(Long userId, Integer from, Integer size) {
         UserMapper.toUser(userService.getById(userId));
-        List<ItemRequest> itemRequestList = requestRepository.findAllByRequester_IdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size));
+        List<ItemRequest> itemRequestList = requestRepository.findAllByRequesterIdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size));
         return itemRequestList.stream()
                 .map(ItemRequestMapper::toRequestDtoOut)
                 .collect(Collectors.toList());

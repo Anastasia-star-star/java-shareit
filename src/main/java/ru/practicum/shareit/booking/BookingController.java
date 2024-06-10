@@ -31,8 +31,7 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingDtoOut update(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                @PathVariable("bookingId")
-                                Long bookingId,
+                                @PathVariable("bookingId") Long bookingId,
                                 @RequestParam(name = "approved") Boolean approved) {
         log.info("Запрос на обновление статуса бронирования вещи от владельца с id: {}", userId);
         return bookingService.update(userId, bookingId, approved);
@@ -40,8 +39,7 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     public BookingDtoOut getBookingByUserId(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                            @PathVariable("bookingId")
-                                            Long bookingId) {
+                                            @PathVariable("bookingId") Long bookingId) {
         log.info("GET запрос на получение данных о  бронировании от пользователя с id: {}", userId);
         return bookingService.getBookingByUserId(userId, bookingId);
     }

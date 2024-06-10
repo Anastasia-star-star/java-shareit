@@ -38,7 +38,9 @@ public class ItemDtoOut {
         this.available = available;
     }
 
-    public ItemDtoOut(Long id, String name, String description, Boolean available, BookingDtoOut lastBooking, List<CommentDtoOut> comments, BookingDtoOut nextBooking) {
+    public ItemDtoOut(Long id, String name, String description, Boolean available,
+                      BookingDtoOut lastBooking, List<CommentDtoOut> comments,
+                      BookingDtoOut nextBooking) {
         this.id = id;
         this.name = name;
         this.description = description;

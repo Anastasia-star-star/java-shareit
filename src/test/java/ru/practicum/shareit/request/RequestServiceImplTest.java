@@ -90,7 +90,7 @@ class RequestServiceImplTest {
     void getAllRequests() {
         List<ItemRequestDtoOut> expectedRequestsDto = List.of(ItemRequestMapper.toRequestDtoOut(request));
         when(userService.getById(user.getId())).thenReturn(userDto);
-        when(requestRepository.findAllByRequester_IdNotOrderByCreatedDesc(anyLong(), any(PageRequest.class)))
+        when(requestRepository.findAllByRequesterIdNotOrderByCreatedDesc(anyLong(), any(PageRequest.class)))
                 .thenReturn(List.of(request));
 
         List<ItemRequestDtoOut> actualRequestsDto = requestService.getAllRequests(userDto.getId(), 0, 10);

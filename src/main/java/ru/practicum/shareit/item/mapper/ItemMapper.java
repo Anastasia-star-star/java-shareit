@@ -37,7 +37,8 @@ public class ItemMapper {
         return itemDtoOut;
     }
 
-    public ItemDtoOut toItemDtoOut(Item item, BookingDtoOut lastBooking, List<CommentDtoOut> comments, BookingDtoOut nextBooking) {
+    public ItemDtoOut toItemDtoOut(Item item, BookingDtoOut lastBooking,
+                                   List<CommentDtoOut> comments, BookingDtoOut nextBooking) {
         return new ItemDtoOut(
                 item.getId(),
                 item.getName(),
