@@ -73,15 +73,13 @@ public class ItemServiceImpl implements ItemService {
                     " не является собственником вещи id = " + itemId);
         }
         Boolean isAvailable = itemDto.getAvailable();
-        if (isAvailable != null) {
-            item.setAvailable(isAvailable);
-        }
+        item.setAvailable(isAvailable);
         String description = itemDto.getDescription();
-        if (description != null && !description.isBlank()) {
+        if (description != null) {
             item.setDescription(description);
         }
         String name = itemDto.getName();
-        if (name != null && !name.isBlank()) {
+        if (name != null) {
             item.setName(name);
         }
         return ItemMapper.toItemDtoOut(item);
