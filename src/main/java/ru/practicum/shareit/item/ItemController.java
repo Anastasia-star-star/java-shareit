@@ -40,8 +40,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDtoOut getItemById(@RequestHeader(X_SHARER_USER_ID) Long userId,
-                                  @PathVariable("itemId")
-                                  Long itemId) {
+                                  @PathVariable("itemId") Long itemId) {
         log.info("GET Запрос на получение предмета с id = {} пользователем с id = {} ", itemId, userId);
         return itemService.getItemById(userId, itemId);
     }
