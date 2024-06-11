@@ -159,14 +159,9 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public CommentDtoOut createComment(Long userId, CommentDto commentDto, Long itemId) {
         User user = UserMapper.toUser(userService.getById(userId));
-        Optional<Item> itemById = itemRepository.findById(itemId);
-
-        if (itemById.isEmpty()) {
-
-            throw new NotFoundException("У пользователя с id = " + userId + " не " +
-                    "существует вещи с id = " + itemId);
-        }
-        Item item = itemById.get();
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("У пользователя с id = " + userId + " не " +
+                        "существует вещи с id = " + itemId));
 
         List<Booking> userBookings = bookingRepository.findAllByUserBookings(userId, itemId, LocalDateTime.now());
 
