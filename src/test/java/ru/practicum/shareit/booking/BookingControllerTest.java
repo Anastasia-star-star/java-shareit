@@ -38,9 +38,6 @@ class BookingControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private BookingService bookingService;
-
     @BeforeEach
     private void initializationItemUser() {
         user = User.builder()
@@ -55,6 +52,9 @@ class BookingControllerTest {
                 .owner(user)
                 .build();
     }
+
+    @MockBean
+    private BookingService bookingService;
 
     private final BookingDto bookingDto = BookingDto.builder()
             .itemId(1L)
