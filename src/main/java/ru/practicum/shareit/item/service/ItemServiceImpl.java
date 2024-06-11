@@ -81,9 +81,8 @@ public class ItemServiceImpl implements ItemService {
             item.setDescription(description);
         }
         String name = itemDto.getName();
-        if (name != null && !name.isBlank()) {
-            item.setName(name);
-        }
+        item.setName(name);
+
         return ItemMapper.toItemDtoOut(item);
     }
 
