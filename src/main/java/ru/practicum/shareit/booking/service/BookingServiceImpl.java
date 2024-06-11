@@ -37,11 +37,8 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingDtoOut add(Long userId, BookingDto bookingDto) {
         User user = UserMapper.toUser(userService.getById(userId));
-        Optional<Item> itemById = itemRepository.findById(bookingDto.getItemId());
-        if (itemById.isEmpty()) {
-            throw new NotFoundException("Вещь не найдена.");
-        }
-        Item item = itemById.get();
+        Item item = itemRepository.findById(bookingDto.getItemId())
+                .orElseThrow(() -> new NotFoundException("Вещь не найдена."));
         bookingValidation(bookingDto, user, item);
         Booking booking = BookingMapper.toBooking(user, item, bookingDto);
         return BookingMapper.toBookingOut(bookingRepository.save(booking));
