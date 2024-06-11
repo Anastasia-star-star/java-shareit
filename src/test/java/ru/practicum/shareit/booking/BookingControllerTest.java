@@ -29,8 +29,6 @@ import static ru.practicum.shareit.item.ItemController.X_SHARER_USER_ID;
 
 @WebMvcTest(controllers = BookingController.class)
 class BookingControllerTest {
-    private Item item;
-    private User user;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -38,38 +36,44 @@ class BookingControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private BookingService bookingService;
+
+    private User user;
+    private Item item;
+    private BookingDto bookingDto;
+    private BookingDtoOut bookingDtoOut;
+
     @BeforeEach
-    private void initializationItemUser() {
+    void setUp() {
         user = User.builder()
                 .id(1L)
                 .name("username")
                 .email("email@email.com")
                 .build();
+
         item = Item.builder()
                 .id(1L)
                 .name("item name")
                 .description("description")
                 .owner(user)
                 .build();
+
+        bookingDto = BookingDto.builder()
+                .itemId(1L)
+                .start(LocalDateTime.now().plusDays(1L))
+                .end(LocalDateTime.now().plusDays(2L))
+                .build();
+
+        bookingDtoOut = BookingDtoOut.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1L))
+                .end(LocalDateTime.now().plusDays(2L))
+                .status(BookingStatus.WAITING)
+                .booker(UserMapper.toUserDto(user))
+                .item(ItemMapper.toItemDtoOut(item))
+                .build();
     }
-
-    @MockBean
-    private BookingService bookingService;
-
-    private final BookingDto bookingDto = BookingDto.builder()
-            .itemId(1L)
-            .start(LocalDateTime.now().plusDays(1L))
-            .end(LocalDateTime.now().plusDays(2L))
-            .build();
-
-    private final BookingDtoOut bookingDtoOut = BookingDtoOut.builder()
-            .id(1L)
-            .start(LocalDateTime.now().plusDays(1L))
-            .end(LocalDateTime.now().plusDays(2L))
-            .status(BookingStatus.WAITING)
-            .booker(UserMapper.toUserDto(user))
-            .item(ItemMapper.toItemDtoOut(item))
-            .build();
 
     @Test
     @SneakyThrows
