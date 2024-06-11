@@ -21,5 +21,4 @@ public interface ItemService {
 
     ItemDtoOut getItemById(Long userId, Long itemId);
 
-
 }
