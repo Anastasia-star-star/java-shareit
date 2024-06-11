@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,6 +29,8 @@ import static ru.practicum.shareit.item.ItemController.X_SHARER_USER_ID;
 
 @WebMvcTest(controllers = BookingController.class)
 class BookingControllerTest {
+    private Item item;
+    private User user;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -38,18 +41,20 @@ class BookingControllerTest {
     @MockBean
     private BookingService bookingService;
 
-    private final User user = User.builder()
-            .id(1L)
-            .name("username")
-            .email("email@email.com")
-            .build();
-
-    private final Item item = Item.builder()
-            .id(1L)
-            .name("item name")
-            .description("description")
-            .owner(user)
-            .build();
+    @BeforeEach
+    private void initializationItemUser(){
+        user = User.builder()
+                .id(1L)
+                .name("username")
+                .email("email@email.com")
+                .build();
+        item = Item.builder()
+                .id(1L)
+                .name("item name")
+                .description("description")
+                .owner(user)
+                .build();
+    }
 
     private final BookingDto bookingDto = BookingDto.builder()
             .itemId(1L)
