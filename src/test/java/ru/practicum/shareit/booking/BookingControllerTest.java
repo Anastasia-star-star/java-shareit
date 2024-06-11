@@ -42,7 +42,7 @@ class BookingControllerTest {
     private BookingService bookingService;
 
     @BeforeEach
-    private void initializationItemUser(){
+    private void initializationItemUser() {
         user = User.builder()
                 .id(1L)
                 .name("username")
