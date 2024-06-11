@@ -154,6 +154,7 @@ public class BookingServiceImpl implements BookingService {
         }
         return state;
     }
+
     private Booking validateBookingDetailsUpdate(Long userId, Long bookingId) {
         Optional<Booking> bookingById = bookingRepository.findById(bookingId);
         if (bookingById.isEmpty()) {
