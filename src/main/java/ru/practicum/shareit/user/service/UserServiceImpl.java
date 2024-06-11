@@ -45,7 +45,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserDto getById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователя с " + id + " не существует")
@@ -60,7 +59,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public List<UserDto> getAll() {
         return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)

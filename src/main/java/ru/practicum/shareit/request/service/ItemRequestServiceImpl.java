@@ -37,7 +37,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ItemRequestDtoOut> getUserRequests(Long userId) {
         UserMapper.toUser(userService.getById(userId));
         List<ItemRequest> itemRequestList = requestRepository.findAllByRequesterId(userId);
@@ -47,7 +46,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ItemRequestDtoOut> getAllRequests(Long userId, Integer from, Integer size) {
         UserMapper.toUser(userService.getById(userId));
         List<ItemRequest> itemRequestList = requestRepository.findAllByRequesterIdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size));
@@ -57,7 +55,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public ItemRequestDtoOut getRequestById(Long userId, Long requestId) {
         userService.getById(userId);
         Optional<ItemRequest> requestById = requestRepository.findById(requestId);

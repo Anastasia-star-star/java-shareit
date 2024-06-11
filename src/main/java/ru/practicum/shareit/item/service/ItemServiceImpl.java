@@ -88,7 +88,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public ItemDtoOut getItemById(Long userId, Long itemId) {
         userService.getById(userId);
         Optional<Item> itemGet = itemRepository.findById(itemId);
@@ -114,7 +113,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ItemDtoOut> getAll(Long userId, Integer from, Integer size) {
         UserDto owner = userService.getById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
@@ -145,7 +143,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ItemDtoOut> search(Long userId, String text, Integer from, Integer size) {
         userService.getById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
@@ -180,7 +177,6 @@ public class ItemServiceImpl implements ItemService {
         return CommentMapper.toCommentDtoOut(commentRepository.save(CommentMapper.toComment(commentDto, item, user)));
     }
 
-    @Transactional(readOnly = true)
     public List<CommentDtoOut> getAllItemComments(Long itemId) {
         List<Comment> comments = commentRepository.getAllByItemId(itemId);
 
@@ -189,7 +185,6 @@ public class ItemServiceImpl implements ItemService {
                 .collect(toList());
     }
 
-    @Transactional(readOnly = true)
     private BookingDtoOut getLastBooking(List<BookingDtoOut> bookings, LocalDateTime time) {
         if (bookings == null || bookings.isEmpty()) {
             return null;
@@ -202,7 +197,6 @@ public class ItemServiceImpl implements ItemService {
                 .orElse(null);
     }
 
-    @Transactional(readOnly = true)
     private BookingDtoOut getNextBooking(List<BookingDtoOut> bookings, LocalDateTime time) {
         if (bookings == null || bookings.isEmpty()) {
             return null;
