@@ -1,24 +1,20 @@
 package ru.practicum.shareit.booking.model;
 
-import ru.practicum.shareit.exception.ArgumentException;
+import java.util.Arrays;
 
 public enum BookingState {
-    WAITING,
     ALL,
     CURRENT,
     PAST,
     FUTURE,
+    WAITING,
     REJECTED;
 
-    public static BookingState getState(String text) {
-        if ((text == null) || text.isBlank()) {
-            return BookingState.ALL;
-        }
 
-        try {
-            return BookingState.valueOf(text.toUpperCase().trim());
-        } catch (Exception e) {
-            throw new ArgumentException(String.format("Unknown state: %s", text));
-        }
+    public static BookingState from(String bookingState) {
+        return Arrays.stream(BookingState.values())
+                .filter(value -> value.name().equals(bookingState))
+                .findFirst()
+                .orElse(null);
     }
 }

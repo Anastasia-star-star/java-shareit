@@ -2,71 +2,72 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDtoOut;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.dto.ItemDtoOut;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/items")
+@Validated
 @RequiredArgsConstructor
 public class ItemController {
-    private static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final ItemService itemService;
+    public static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
 
     @PostMapping
-    public ItemDto addItem(@RequestHeader(X_SHARER_USER_ID) long ownerId,
-                           @Valid @RequestBody @NotNull ItemDto itemDto) {
-        log.info("Adding new item");
-        return itemService.addItem(ownerId, ItemMapper.toItem(itemDto));
+    public ItemDtoOut add(@RequestHeader(X_SHARER_USER_ID) Long userId,
+                          @Valid @RequestBody ItemDto itemDto) {
+        log.info("POST Запрос на добавление пользователем с id = {} предмета {}", userId, itemDto.toString());
+        return itemService.add(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto update(@RequestHeader(X_SHARER_USER_ID) long ownerId, @PathVariable long itemId,
-                          @RequestBody @NotNull Map<String, String> updates) {
-        log.info("Updating item");
-        return itemService.update(ownerId, itemId, updates);
+    public ItemDtoOut update(@RequestHeader(X_SHARER_USER_ID) Long userId,
+                             @RequestBody ItemDto itemDto,
+                             @PathVariable Long itemId) {
+        log.info("PATCH Запрос на обновление предмета с id = {} пользователем с id = {} ", itemId, userId);
+        return itemService.update(userId, itemId, itemDto);
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItemDtoById(@RequestHeader(X_SHARER_USER_ID) long userId,
-                                  @PathVariable long itemId) {
-        log.info("Getting item DTO by Id");
-        return itemService.getItemDtoById(itemId, userId);
+    public ItemDtoOut getItemById(@RequestHeader(X_SHARER_USER_ID) Long userId,
+                                  @PathVariable("itemId") Long itemId) {
+        log.info("GET Запрос на получение предмета с id = {} пользователем с id = {} ", itemId, userId);
+        return itemService.getItemById(userId, itemId);
     }
 
     @GetMapping
-    public List<ItemDto> getAllUserItems(@RequestHeader(X_SHARER_USER_ID) long ownerId) {
-        log.info("Getting all users items");
-        return itemService.getAllUserItems(ownerId);
+    public List<ItemDtoOut> getAll(@RequestHeader(X_SHARER_USER_ID) Long userId,
+                                   @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                   @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size
+    ) {
+        log.info("GET Запрос на получение предметов пользователя с id = {}", userId);
+        return itemService.getAll(userId, from, size);
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestHeader(X_SHARER_USER_ID) long userId,
-                                     @RequestParam(name = "text") String text) {
-        log.info("Searching item");
-        return itemService.searchItems(userId, text);
-    }
-
-    @DeleteMapping("/{itemId}")
-    public void delete(@RequestHeader(X_SHARER_USER_ID) long ownerId,
-                       @PathVariable long itemId) {
-        log.info("Deleting item");
-        itemService.delete(ownerId, itemId);
+    public List<ItemDtoOut> search(@RequestHeader(X_SHARER_USER_ID) Long userId,
+                                   @RequestParam(name = "text") String text,
+                                   @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                   @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
+        log.info("GET Запрос на поиск предметов c текстом = {}", text);
+        return itemService.search(userId, text, from, size);
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment(@RequestHeader(X_SHARER_USER_ID) long userId,
-                                 @PathVariable long itemId,
-                                 @Valid @RequestBody CommentDto commentDto) {
-        log.info("Adding comment");
-        return itemService.addComment(userId, itemId, commentDto);
+    public CommentDtoOut createComment(@RequestHeader(X_SHARER_USER_ID) Long userId,
+                                       @Validated @RequestBody CommentDto commentDto,
+                                       @PathVariable Long itemId) {
+        log.info("POST Запрос на создание комментария id = {}", itemId);
+        return itemService.createComment(userId, commentDto, itemId);
     }
 }

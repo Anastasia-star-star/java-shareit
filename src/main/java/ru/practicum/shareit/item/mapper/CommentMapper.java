@@ -2,34 +2,31 @@ package ru.practicum.shareit.item.mapper;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDtoOut;
 import ru.practicum.shareit.item.model.Comment;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 
 @UtilityClass
 public class CommentMapper {
-    public static CommentDto toDto(Comment comment) {
-        return CommentDto.builder()
-                .id(comment.getId())
-                .text(comment.getText())
-                .itemName(comment.getItem().getName())
-                .authorName(comment.getAuthor().getName())
-                .created(comment.getCreated())
-                .build();
+    public CommentDto toCommentDto(Comment comment) {
+        return new CommentDto(
+                comment.getText());
     }
 
-    public static Comment toComment(CommentDto commentDto) {
-        return Comment.builder()
-                .id(commentDto.getId())
-                .text(commentDto.getText())
-                .created(commentDto.getCreated())
-                .build();
+    public CommentDtoOut toCommentDtoOut(Comment comment) {
+        return new CommentDtoOut(
+                comment.getId(),
+                comment.getText(),
+                comment.getAuthor().getName(),
+                comment.getCreated(),
+                comment.getItem().getId());
     }
 
-    public static List<CommentDto> toDtoList(List<Comment> comments) {
-        return comments.stream()
-                .map(CommentMapper::toDto)
-                .collect(Collectors.toList());
+    public Comment toComment(CommentDto commentDto, Item item, User user) {
+        return new Comment(
+                commentDto.getText(),
+                item,
+                user);
     }
 }

@@ -1,21 +1,25 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.*;
-import ru.practicum.shareit.user.model.User;
+import org.hibernate.annotations.CreationTimestamp;
+import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
-@Entity
-@Builder
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
-@RequiredArgsConstructor
-@Table(name = "comments")
+@NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "comments", schema = "public")
 public class Comment {
+
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -23,17 +27,23 @@ public class Comment {
     @NotBlank
     private String text;
 
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "item_id")
-    @NotNull
+    @ToString.Exclude
     private Item item;
 
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "author_id")
-    @NotNull
+    @ToString.Exclude
     private User author;
 
-    private LocalDateTime created = LocalDateTime.now();
+    @Column(name = "created")
+    @CreationTimestamp
+    private LocalDateTime created;
+
+    public Comment(String text, Item item, User author) {
+        this.text = text;
+        this.item = item;
+        this.author = author;
+    }
 }

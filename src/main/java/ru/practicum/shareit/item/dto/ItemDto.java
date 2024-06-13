@@ -1,39 +1,34 @@
 package ru.practicum.shareit.item.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.user.model.User;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ItemDto {
-    private Long id;
-    @NotBlank(message = "Name must be filled")
+
+    @NotBlank
     private String name;
 
-    @NotBlank(message = "Description must be filled")
+    @NotBlank
     private String description;
 
-    @NotNull(message = "Available must be filled")
+    @NotNull
     private Boolean available;
 
-    @JsonIgnore
-    private User owner;
+    private Long requestId;
 
-    @JsonIgnore
-    private Long request;
-
-    private BookingDto lastBooking;
-
-    private BookingDto nextBooking;
-
-    private List<CommentDto> comments;
+    public ItemDto(String name, String description, Boolean available) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
 }
