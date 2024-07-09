@@ -7,7 +7,6 @@ services:
       - "8080:8080"
     depends_on:
       - server
-      - db
     environment:
       - SHAREIT_SERVER_URL=http://server:9090
 
@@ -17,19 +16,24 @@ services:
     ports:
       - "9090:9090"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
+      - DB_NAME=shareit
+      - POSTGRES_USER=shareit
+      - POSTGRES_PASSWORD=shareit
+      - DB_HOST=db
+      - DB_PORT=5432
+
 
   db:
     # образ, из которого должен быть запущен контейнер
-    image: postgres:13.7-alpine
+    image: postgres
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
       timeout: 10s
       retries: 5
-    container_name: db
     ports:
       - "5432:5432"
     # volume и связанная с ним директория в контейнере

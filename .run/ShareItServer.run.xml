@@ -1,5 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ShareItServer" type="Application" factoryName="Application" nameIsGenerated="true">
+    <envs>
+      <env name="POSTGRES_DB" value="shareit" />
+      <env name="DB_NAME" value="shareit" />
+      <env name="POSTGRES_USER" value="shareit" />
+      <env name="POSTGRES_PASSWORD" value="shareit" />
+      <env name="DB_HOST" value="localhost" />
+      <env name="DB_PORT" value="5432" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="ru.practicum.shareit.ShareItServer" />
     <module name="shareit-server" />
     <extension name="coverage">
