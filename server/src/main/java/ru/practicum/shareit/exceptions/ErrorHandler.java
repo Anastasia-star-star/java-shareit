@@ -14,8 +14,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        log.warn("Получен статус 404 NOT_FOUND {}", e.getMessage(), e);
+    public ErrorResponse handleNotFoundException(NotFoundException e) {
+        log.error("Получен статус 404 NOT_FOUND {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
 
@@ -24,8 +24,8 @@ public class ErrorHandler {
 
     @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(final Exception e) {
-        log.warn("Получен статус 400 BAD_REQUEST {}", e.getMessage(), e);
+    public ErrorResponse handleValidationException(Exception e) {
+        log.error("Получен статус 400 BAD_REQUEST {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -34,8 +34,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleOtherException(final Throwable e) {
-        log.warn("Получен статус 500 SERVER_ERROR {}", e.getMessage(), e);
+    public ErrorResponse handleOtherException(Throwable e) {
+        log.error("Получен статус 500 SERVER_ERROR {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );

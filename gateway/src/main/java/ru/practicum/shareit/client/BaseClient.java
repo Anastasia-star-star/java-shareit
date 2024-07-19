@@ -11,7 +11,7 @@ import java.util.Map;
 import static ru.practicum.shareit.Constants.USER_HEADER;
 
 public class BaseClient {
-    protected final RestTemplate rest;
+    private final RestTemplate rest;
 
     public BaseClient(RestTemplate rest) {
         this.rest = rest;
