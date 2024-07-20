@@ -25,11 +25,13 @@ public class ItemRequestController {
     @PostMapping
     public ResponseEntity<Object> add(@RequestHeader(USER_HEADER) Long userId,
                                       @Valid @RequestBody ItemRequestDto requestDto) {
+        log.info("Добавление запроса");
         return requestClient.addNewRequest(userId, requestDto);
     }
 
     @GetMapping
     public ResponseEntity<Object> getUserRequests(@RequestHeader(USER_HEADER) Long userId) {
+        log.info("Получение пользователя");
         return requestClient.getUserRequests(userId);
     }
 
@@ -37,12 +39,14 @@ public class ItemRequestController {
     public ResponseEntity<Object> getAllRequests(@RequestHeader(USER_HEADER) Long userId,
                                                  @RequestParam(name = "from", defaultValue = "0") @Min(0) Integer from,
                                                  @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
+        log.info("Получение всех запросов");
         return requestClient.getAllRequests(userId, from, size);
     }
 
     @GetMapping("/{requestId}")
     public ResponseEntity<Object> get(@RequestHeader(USER_HEADER) Long userId,
                                       @PathVariable Long requestId) {
+        log.info("Получение запроса по Id");
         return requestClient.getRequestById(userId, requestId);
     }
 }

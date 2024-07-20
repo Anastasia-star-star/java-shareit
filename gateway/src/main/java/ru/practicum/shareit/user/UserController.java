@@ -35,13 +35,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> get(@PathVariable Long userId) {
+    public ResponseEntity<Object> getById(@PathVariable Long userId) {
         log.info("GET запрос на получение пользователя c id: {}", userId);
         return userClient.getById(userId);
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> delete(@PathVariable long userId) {
+    public ResponseEntity<Object> deleteById(@PathVariable long userId) {
         log.info("DELETE запрос на удаление пользователя с id: {}", userId);
         return userClient.deleteById(userId);
     }

@@ -30,7 +30,8 @@ public class BookingController {
                                               @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
                                               @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                               @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        BookingState state = BookingState.from(stateParam).orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+        BookingState state = BookingState.from(stateParam).orElseThrow(() ->
+                new IllegalArgumentException("Unknown state: " + stateParam));
         log.info("Get booking with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
         return bookingClient.getBookings(userId, state, from, size);
     }
@@ -56,15 +57,16 @@ public class BookingController {
                                               @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
         BookingState state = BookingState.from(bookingState)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + bookingState));
-        log.info("GET запрос на получение списка всех бронирований c state {}, userId={}, from={}, size={}", bookingState, ownerId, from, size);
+        log.info("GET запрос на получение списка всех бронирований c state {}, userId={}, from={}, size={}",
+                bookingState, ownerId, from, size);
         return bookingClient.getAllOwner(ownerId, state, from, size);
     }
 
     @PatchMapping("/{bookingId}")
-    public ResponseEntity<Object> updateStatus(@RequestHeader(USER_HEADER) Long userId,
+    public ResponseEntity<Object> update(@RequestHeader(USER_HEADER) Long userId,
                                                @PathVariable("bookingId") Long bookingId,
                                                @RequestParam("approved") Boolean approved) {
-        log.info("PATCH запрос на обновление статуса бронирования вещи : {} от владельца с id: {}", bookingId, userId);
+        log.info("PATCH request on updating status of booking thing : {} by user with id: {}", bookingId, userId);
         return bookingClient.update(userId, bookingId, approved);
     }
 

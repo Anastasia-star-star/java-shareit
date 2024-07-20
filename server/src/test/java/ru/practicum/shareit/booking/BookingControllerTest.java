@@ -90,7 +90,7 @@ class BookingControllerTest {
         Boolean approved = true;
         Long bookingId = 1L;
 
-        when(bookingService.update(user.getId(), bookingId, approved)).thenReturn(bookingDtoOut);
+        when(bookingService.updateStatus(user.getId(), bookingId, approved)).thenReturn(bookingDtoOut);
 
         String result = mockMvc.perform(patch("/bookings/{bookingId}", bookingId)
                         .contentType("application/json")
@@ -109,7 +109,7 @@ class BookingControllerTest {
     void getByIdWhenBookingIsValid() {
         Long bookingId = 1L;
 
-        when(bookingService.findBookingByUserId(user.getId(), bookingId)).thenReturn(bookingDtoOut);
+        when(bookingService.getBookingByUserId(user.getId(), bookingId)).thenReturn(bookingDtoOut);
 
         String result = mockMvc.perform(get("/bookings/{bookingId}", bookingId)
                         .header(USER_HEADER, user.getId())).andExpect(status().isOk())
@@ -127,7 +127,7 @@ class BookingControllerTest {
         Integer size = 10;
         String state = "ALL";
 
-        when(bookingService.findAll(user.getId(), BookingState.ALL.toString(), 0, 10))
+        when(bookingService.getAll(user.getId(), BookingState.ALL.toString(), 0, 10))
                 .thenReturn(List.of(bookingDtoOut));
 
         String result = mockMvc.perform(get("/bookings")
@@ -151,7 +151,7 @@ class BookingControllerTest {
         Integer size = 10;
         String state = "ALL";
 
-        when(bookingService.findAllOwner(user.getId(), BookingState.ALL.toString(), 0, 10))
+        when(bookingService.getAllOwner(user.getId(), BookingState.ALL.toString(), 0, 10))
                 .thenReturn(List.of(bookingDtoOut));
 
         String result = mockMvc.perform(get("/bookings/owner")

@@ -9,11 +9,11 @@ import java.util.List;
 public interface BookingService {
     BookingDtoOut add(Long userId, BookingDto bookingDto);
 
-    BookingDtoOut update(Long userId, Long bookingId, Boolean approved);
+    BookingDtoOut updateStatus(Long userId, Long bookingId, Boolean approved);
 
-    BookingDtoOut findBookingByUserId(Long userId, Long bookingId);
+    BookingDtoOut getBookingByUserId(Long userId, Long bookingId);
 
-    List<BookingDtoOut> findAll(Long userId, String state, Integer from, Integer size);
+    List<BookingDtoOut> getAll(Long userId, String state, Integer from, Integer size);
 
-    List<BookingDtoOut> findAllOwner(Long userId, String state, Integer from, Integer size);
+    List<BookingDtoOut> getAllOwner(Long userId, String state, Integer from, Integer size);
 }

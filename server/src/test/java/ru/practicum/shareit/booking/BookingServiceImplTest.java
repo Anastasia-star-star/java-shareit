@@ -156,7 +156,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingWaiting));
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingWaiting);
 
-        BookingDtoOut actualBookingDtoOut = bookingService.update(owner.getId(), bookingWaiting.getId(), true);
+        BookingDtoOut actualBookingDtoOut = bookingService.updateStatus(owner.getId(), bookingWaiting.getId(), true);
 
         assertEquals(BookingStatus.APPROVED, actualBookingDtoOut.getStatus());
     }
@@ -166,7 +166,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingWaiting));
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingWaiting);
 
-        BookingDtoOut actualBookingDtoOut = bookingService.update(owner.getId(), bookingWaiting.getId(), false);
+        BookingDtoOut actualBookingDtoOut = bookingService.updateStatus(owner.getId(), bookingWaiting.getId(), false);
 
         assertEquals(BookingStatus.REJECTED, actualBookingDtoOut.getStatus());
     }
@@ -176,7 +176,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
         ValidationException bookingValidationException = assertThrows(ValidationException.class,
-                () -> bookingService.update(owner.getId(), booking.getId(), false));
+                () -> bookingService.updateStatus(owner.getId(), booking.getId(), false));
 
         assertEquals(bookingValidationException.getMessage(), "Бронь не cо статусом WAITING");
     }
@@ -186,7 +186,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
         NotFoundException bookingNotFoundException = assertThrows(NotFoundException.class,
-                () -> bookingService.update(userDto.getId(), booking.getId(), true));
+                () -> bookingService.updateStatus(userDto.getId(), booking.getId(), true));
 
         assertEquals(bookingNotFoundException.getMessage(), "Пользователь не является владельцем");
     }
@@ -196,7 +196,7 @@ class BookingServiceImplTest {
         BookingDtoOut expectedBookingDtoOut = BookingMapper.toBookingOut(booking);
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
-        BookingDtoOut actualBookingDtoOut = bookingService.findBookingByUserId(user.getId(), booking.getId());
+        BookingDtoOut actualBookingDtoOut = bookingService.getBookingByUserId(user.getId(), booking.getId());
 
         assertEquals(expectedBookingDtoOut, actualBookingDtoOut);
     }
@@ -206,7 +206,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         NotFoundException bookingNotFoundException = assertThrows(NotFoundException.class,
-                () -> bookingService.findBookingByUserId(1L, booking.getId()));
+                () -> bookingService.getBookingByUserId(1L, booking.getId()));
 
         assertEquals(bookingNotFoundException.getMessage(), "Бронь не найдена.");
     }
@@ -216,7 +216,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
         NotFoundException bookingNotFoundException = assertThrows(NotFoundException.class,
-                () -> bookingService.findBookingByUserId(3L, booking.getId()));
+                () -> bookingService.getBookingByUserId(3L, booking.getId()));
 
         assertEquals(bookingNotFoundException.getMessage(), "Пользователь не владелeц и не автор бронирования ");
     }
@@ -227,7 +227,7 @@ class BookingServiceImplTest {
         when(userService.findById(user.getId())).thenReturn(userDto);
         when(bookingRepository.findAllBookingsByBookerId(anyLong(), any(Pageable.class))).thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAll(user.getId(), "ALL", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAll(user.getId(), "ALL", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -239,7 +239,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllCurrentBookingsByBookerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAll(user.getId(), "CURRENT", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAll(user.getId(), "CURRENT", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -251,7 +251,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllPastBookingsByBookerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAll(user.getId(), "PAST", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAll(user.getId(), "PAST", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -263,7 +263,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllFutureBookingsByBookerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAll(user.getId(), "FUTURE", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAll(user.getId(), "FUTURE", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -275,7 +275,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllWaitingBookingsByBookerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAll(user.getId(), "WAITING", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAll(user.getId(), "WAITING", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -284,7 +284,7 @@ class BookingServiceImplTest {
     @Test
     void getAllByBookerWhenBookingStateIsNotValidShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
-                () -> bookingService.findAll(user.getId(), "ERROR", 0, 10));
+                () -> bookingService.getAll(user.getId(), "ERROR", 0, 10));
     }
 
     @Test
@@ -293,7 +293,7 @@ class BookingServiceImplTest {
         when(userService.findById(user.getId())).thenReturn(userDto);
         when(bookingRepository.findAllBookingsByOwnerId(anyLong(), any(Pageable.class))).thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAllOwner(user.getId(), "ALL", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAllOwner(user.getId(), "ALL", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -305,7 +305,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllCurrentBookingsByOwnerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAllOwner(user.getId(), "CURRENT", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAllOwner(user.getId(), "CURRENT", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -317,7 +317,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllPastBookingsByOwnerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAllOwner(user.getId(), "PAST", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAllOwner(user.getId(), "PAST", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -329,7 +329,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllFutureBookingsByOwnerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAllOwner(user.getId(), "FUTURE", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAllOwner(user.getId(), "FUTURE", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -341,7 +341,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllWaitingBookingsByOwnerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAllOwner(user.getId(), "WAITING", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAllOwner(user.getId(), "WAITING", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -353,7 +353,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllRejectedBookingsByOwnerId(anyLong(), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAllOwner(user.getId(), "REJECTED", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAllOwner(user.getId(), "REJECTED", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
 
@@ -366,7 +366,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findAllRejectedBookingsByBookerId(anyLong(), any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(List.of(booking));
 
-        List<BookingDtoOut> actualBookingsDtoOut = bookingService.findAll(user.getId(), "REJECTED", 0, 10);
+        List<BookingDtoOut> actualBookingsDtoOut = bookingService.getAll(user.getId(), "REJECTED", 0, 10);
 
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
@@ -376,6 +376,6 @@ class BookingServiceImplTest {
         when(userService.findById(user.getId())).thenReturn(userDto);
 
         assertThrows(IllegalArgumentException.class,
-                () -> bookingService.findAllOwner(user.getId(), "ERROR", 0, 10));
+                () -> bookingService.getAllOwner(user.getId(), "ERROR", 0, 10));
     }
 }

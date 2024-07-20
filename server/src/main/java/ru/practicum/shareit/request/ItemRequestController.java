@@ -25,11 +25,13 @@ public class ItemRequestController {
     @PostMapping
     public ItemRequestDtoOut add(@RequestHeader(USER_HEADER) Long userId,
                                  @RequestBody ItemRequestDto requestDto) {
+        log.info("Добавление запроса");
         return requestService.add(userId, requestDto);
     }
 
     @GetMapping
     public List<ItemRequestDtoOut> getUserRequests(@RequestHeader(USER_HEADER) Long userId) {
+        log.info("Получение пользователя");
         return requestService.getUserRequests(userId);
     }
 
@@ -37,12 +39,14 @@ public class ItemRequestController {
     public List<ItemRequestDtoOut> getAllRequests(@RequestHeader(USER_HEADER) Long userId,
                                                   @RequestParam(name = "from", defaultValue = "0") Integer from,
                                                   @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        log.info("Получение всех запросов");
         return requestService.getAllRequests(userId, from, size);
     }
 
     @GetMapping("/{requestId}")
     public ItemRequestDtoOut get(@RequestHeader(USER_HEADER) Long userId,
                                  @PathVariable Long requestId) {
+        log.info("Получение запроса по Id");
         return requestService.getRequestById(userId, requestId);
     }
 }

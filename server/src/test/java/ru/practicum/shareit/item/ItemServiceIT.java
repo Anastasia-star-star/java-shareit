@@ -91,7 +91,7 @@ public class ItemServiceIT {
         ItemDtoOut addedItem = itemService.add(addedUser2.getId(), itemDto2);
         BookingDtoOut bookingDtoOut = bookingService.add(addedUser1.getId(), bookingDto);
 
-        bookingService.update(addedUser2.getId(), bookingDtoOut.getId(), true);
+        bookingService.updateStatus(addedUser2.getId(), bookingDtoOut.getId(), true);
         Thread.sleep(2000);
         CommentDtoOut addedComment = itemService.createComment(addedUser1.getId(), commentDto, addedItem.getId());
 

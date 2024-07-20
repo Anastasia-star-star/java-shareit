@@ -79,15 +79,15 @@ public class BookingServiceIT {
         assertEquals(BookingStatus.WAITING, bookingDtoOut1.getStatus());
         assertEquals(BookingStatus.WAITING, bookingDtoOut2.getStatus());
 
-        BookingDtoOut updatedBookingDto1 = bookingService.update(addedUser2.getId(),
+        BookingDtoOut updatedBookingDto1 = bookingService.updateStatus(addedUser2.getId(),
                 bookingDtoOut1.getId(), true);
-        BookingDtoOut updatedBookingDto2 = bookingService.update(addedUser2.getId(),
+        BookingDtoOut updatedBookingDto2 = bookingService.updateStatus(addedUser2.getId(),
                 bookingDtoOut2.getId(), true);
 
         assertEquals(BookingStatus.APPROVED, updatedBookingDto1.getStatus());
         assertEquals(BookingStatus.APPROVED, updatedBookingDto2.getStatus());
 
-        List<BookingDtoOut> bookingsDtoOut = bookingService.findAllOwner(addedUser2.getId(),
+        List<BookingDtoOut> bookingsDtoOut = bookingService.getAllOwner(addedUser2.getId(),
                 BookingState.ALL.toString(), 0, 10);
 
         assertEquals(2, bookingsDtoOut.size());
@@ -100,6 +100,6 @@ public class BookingServiceIT {
 
         Assertions
                 .assertThrows(NotFoundException.class,
-                        () -> bookingService.update(userId, bookingId, true));
+                        () -> bookingService.updateStatus(userId, bookingId, true));
     }
 }
