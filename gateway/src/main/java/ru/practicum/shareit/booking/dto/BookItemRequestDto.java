@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @StartBeforeEndDateValid
 public class BookItemRequestDto {
 
-    @NotNull
     private long itemId;
 
     @NotNull
