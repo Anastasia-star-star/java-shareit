@@ -18,11 +18,9 @@ public class BookItemRequestDto {
 
     private long itemId;
 
-    @NotNull
     @FutureOrPresent
     private LocalDateTime start;
-
-    @NotNull
+    
     @Future
     private LocalDateTime end;
 }
