@@ -14,8 +14,11 @@ import lombok.NoArgsConstructor;
 public class ItemDto {
 
     private String name;
+
     private String description;
+
     private Boolean available;
+
     private Long requestId;
 
     public ItemDto(String name, String description, Boolean available) {
