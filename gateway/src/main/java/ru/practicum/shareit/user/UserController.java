@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.markers.Create;
+import ru.practicum.shareit.user.markers.Update;
 
 
 @Controller
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<Object> update(@RequestBody UserDto userDto, @PathVariable Long userId) {
+    public ResponseEntity<Object> update(@Validated({Update.class}) @RequestBody UserDto userDto, @PathVariable Long userId) {
         log.info("PATCH запрос на обновление пользователя c id: {}", userId);
         return userClient.update(userId, userDto);
     }

@@ -19,7 +19,7 @@ public class BookItemRequestDto {
 
     @FutureOrPresent
     private LocalDateTime start;
-    
+
     @Future
     private LocalDateTime end;
 }
