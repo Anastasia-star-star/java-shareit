@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class BookItemRequestDto {
 
     private long itemId;
-    
+
     @FutureOrPresent
     private LocalDateTime start;
 
