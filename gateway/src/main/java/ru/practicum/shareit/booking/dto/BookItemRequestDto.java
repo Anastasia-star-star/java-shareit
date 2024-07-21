@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @StartBeforeEndDateValid
 public class BookItemRequestDto {
-    
+
+    @NotNull
     private long itemId;
 
     @NotNull
