@@ -36,7 +36,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingDtoOut add(Long userId, BookingDto bookingDto) {
-        User user = UserMapper.toUser(userService.findById(userId));
+        User user = UserMapper.toUser(userService.getById(userId));
         Item item = itemRepository.findById(bookingDto.getItemId())
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена."));
         bookingValidation(bookingDto, user, item);
@@ -62,7 +62,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDtoOut> getAll(Long bookerId, String state, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        userService.findById(bookerId);
+        userService.getById(bookerId);
         switch (validState(state)) {
             case ALL:
                 return bookingRepository.findAllBookingsByBookerId(bookerId, pageable).stream()
@@ -100,7 +100,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDtoOut> getAllOwner(Long ownerId, String state, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        userService.findById(ownerId);
+        userService.getById(ownerId);
         switch (validState(state)) {
             case ALL:
                 return bookingRepository.findAllBookingsByOwnerId(ownerId, pageable).stream()

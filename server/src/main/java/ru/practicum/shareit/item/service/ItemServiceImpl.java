@@ -52,7 +52,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDtoOut add(Long userId, ItemDto itemDto) {
-        UserDto user = userService.findById(userId);
+        UserDto user = userService.getById(userId);
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner((UserMapper.toUser(user)));
         if (itemDto.getRequestId() != null) {
@@ -65,7 +65,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDtoOut update(Long userId, Long itemId, ItemDto itemDto) {
-        UserDto user = userService.findById(userId);
+        UserDto user = userService.getById(userId);
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещи с " + itemId + " не существует")
                 );
@@ -91,7 +91,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDtoOut findItemById(Long userId, Long itemId) {
-        userService.findById(userId);
+        userService.getById(userId);
         Optional<Item> itemGet = itemRepository.findById(itemId);
         if (itemGet.isEmpty()) {
             throw new NotFoundException("У пользователя с id = " + userId + " не " +
@@ -117,7 +117,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDtoOut> findAll(Long userId, Integer from, Integer size) {
-        UserDto owner = userService.findById(userId);
+        UserDto owner = userService.getById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
         List<Item> itemList = itemRepository.findAllByOwnerId(userId, pageable);
         itemList.sort((o1, o2) -> Math.toIntExact(o1.getId() - o2.getId()));
@@ -149,7 +149,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDtoOut> search(Long userId, String text, Integer from, Integer size) {
-        userService.findById(userId);
+        userService.getById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
         if (text.isBlank()) {
             return Collections.emptyList();
@@ -163,7 +163,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public CommentDtoOut createComment(Long userId, CommentDto commentDto, Long itemId) {
-        User user = UserMapper.toUser(userService.findById(userId));
+        User user = UserMapper.toUser(userService.getById(userId));
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("У пользователя с id = " + userId + " не " +
                         "существует вещи с id = " + itemId));

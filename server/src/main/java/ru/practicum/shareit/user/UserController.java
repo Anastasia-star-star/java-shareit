@@ -27,13 +27,13 @@ public class UserController {
     @GetMapping("/{userId}")
     public UserDto findById(@PathVariable Long userId) {
         log.info("Запрос на получение пользователя id = {}", userId);
-        return userService.findById(userId);
+        return userService.getById(userId);
     }
 
     @GetMapping
     public List<UserDto> findAll() {
         log.info("Запрос на получение списка всех пользователей");
-        return userService.findAll();
+        return userService.getAll();
     }
 
     @PatchMapping("/{userId}")

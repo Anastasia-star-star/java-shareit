@@ -66,7 +66,7 @@ class UserServiceImplTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
         UserDto expectedUserDto = UserMapper.toUserDto(expectedUser);
 
-        UserDto actualUserDto = userService.findById(userId);
+        UserDto actualUserDto = userService.getById(userId);
 
         assertEquals(expectedUserDto, actualUserDto);
     }
@@ -77,7 +77,7 @@ class UserServiceImplTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         NotFoundException userNotFoundException = assertThrows(NotFoundException.class,
-                () -> userService.findById(userId));
+                () -> userService.getById(userId));
 
         assertEquals(userNotFoundException.getMessage(), "Пользователя с " + userId + " не существует");
     }
@@ -91,7 +91,7 @@ class UserServiceImplTest {
 
         when(userRepository.findAll()).thenReturn(expectedUsers);
 
-        List<UserDto> actualUsersDto = userService.findAll();
+        List<UserDto> actualUsersDto = userService.getAll();
 
         assertEquals(actualUsersDto.size(), 1);
         assertEquals(actualUsersDto, expectedUserDto);

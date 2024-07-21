@@ -157,7 +157,7 @@ class ItemServiceImplTest {
                 .available(true)
                 .build();
 
-        when(userService.findById(user.getId())).thenReturn(userDto);
+        when(userService.getById(user.getId())).thenReturn(userDto);
         when(itemRepository.save(itemSaveTest)).thenReturn(itemSaveTest);
 
         ItemDtoOut actualItemDto = itemService.add(userDto.getId(), ItemMapper.toItemDto(itemSaveTest));
@@ -168,7 +168,7 @@ class ItemServiceImplTest {
 
     @Test
     void getItemById() {
-        when(userService.findById(user.getId())).thenReturn(userDto);
+        when(userService.getById(user.getId())).thenReturn(userDto);
         when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
 
         ItemDtoOut actualItemDto = itemService.findItemById(user.getId(), item.getId());
@@ -189,7 +189,7 @@ class ItemServiceImplTest {
                 .request(itemRequest)
                 .build();
 
-        when(userService.findById(user.getId())).thenReturn(UserMapper.toUserDto(user));
+        when(userService.getById(user.getId())).thenReturn(UserMapper.toUserDto(user));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(updatedItem));
 
         ItemDtoOut savedItem = itemService.update(user.getId(), itemDto.getId(), ItemMapper.toItemDto(updatedItem));
@@ -209,7 +209,7 @@ class ItemServiceImplTest {
                 .build();
 
         when(itemRepository.findById(anyLong())).thenReturn(Optional.ofNullable(updatedItem));
-        when(userService.findById(user.getId())).thenReturn(userDto);
+        when(userService.getById(user.getId())).thenReturn(userDto);
 
         NotFoundException itemNotFoundException = assertThrows(NotFoundException.class,
                 () -> itemService.update(user.getId(), itemDto.getId(), ItemMapper.toItemDto(updatedItem)));
@@ -242,7 +242,7 @@ class ItemServiceImplTest {
     @Test
     void createComment() {
         CommentDtoOut expectedCommentDto = CommentMapper.toCommentDtoOut(comment);
-        when(userService.findById(user.getId())).thenReturn(userDto);
+        when(userService.getById(user.getId())).thenReturn(userDto);
         when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
         when(bookingRepository.findAllByUserBookings(anyLong(), anyLong(), any(LocalDateTime.class)))
                 .thenReturn(List.of(booking));
@@ -255,7 +255,7 @@ class ItemServiceImplTest {
 
     @Test
     void createComment_whenItemIdIsNotValid_thenThrowObjectNotFoundException() {
-        when(userService.findById(user.getId())).thenReturn(userDto);
+        when(userService.getById(user.getId())).thenReturn(userDto);
         when(itemRepository.findById(item.getId())).thenReturn(Optional.empty());
 
         NotFoundException itemNotFoundException = assertThrows(NotFoundException.class,
@@ -267,7 +267,7 @@ class ItemServiceImplTest {
 
     @Test
     void createCommentWhenUserHaveNotAnyBookingsShouldThrowValidationException() {
-        when(userService.findById(user.getId())).thenReturn(userDto);
+        when(userService.getById(user.getId())).thenReturn(userDto);
         when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
         when(bookingRepository.findAllByUserBookings(anyLong(), anyLong(), any(LocalDateTime.class)))
                 .thenReturn(Collections.emptyList());

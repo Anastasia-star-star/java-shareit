@@ -45,8 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public UserDto findById(Long id) {
+    public UserDto getById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователя с " + id + " не существует")
                 );
@@ -60,8 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public List<UserDto> findAll() {
+    public List<UserDto> getAll() {
         return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());

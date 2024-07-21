@@ -86,7 +86,7 @@ class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        verify(userService).findById(userId);
+        verify(userService).getById(userId);
     }
 
     @Test
@@ -94,7 +94,7 @@ class UserControllerTest {
     void findAll() {
         List<UserDto> usersDtoToExpect = List.of(UserDto.builder().name("name").email("email@email.com").build());
 
-        when(userService.findAll()).thenReturn(usersDtoToExpect);
+        when(userService.getAll()).thenReturn(usersDtoToExpect);
 
         String result = mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(status().isOk())
