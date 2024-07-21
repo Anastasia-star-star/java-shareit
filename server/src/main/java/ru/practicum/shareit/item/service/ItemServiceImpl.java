@@ -164,23 +164,20 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public CommentDtoOut createComment(Long userId, CommentDto commentDto, Long itemId) {
         User user = UserMapper.toUser(userService.findById(userId));
-        Optional<Item> itemById = itemRepository.findById(itemId);
-
-        if (itemById.isEmpty()) {
-
-            throw new NotFoundException("У пользователя с id = " + userId + " не " +
-                    "существует вещи с id = " + itemId);
-        }
-        Item item = itemById.get();
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("У пользователя с id = " + userId + " не " +
+                        "существует вещи с id = " + itemId));
 
         List<Booking> userBookings = bookingRepository.findAllByUserBookings(userId, itemId, LocalDateTime.now());
 
         if (userBookings.isEmpty()) {
-            throw new ValidationException("У пользователя с id   " + userId + " должно быть хотя бы одно бронирование предмета с id " + itemId);
+            throw new ValidationException("У пользователя с id   " + userId +
+                    " должно быть хотя бы одно бронирование предмета с id " + itemId);
         }
 
         return CommentMapper.toCommentDtoOut(commentRepository.save(CommentMapper.toComment(commentDto, item, user)));
     }
+
 
     public List<CommentDtoOut> getAllItemComments(Long itemId) {
         List<Comment> comments = commentRepository.findAllByItemId(itemId);

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ItemRequestServiceImpl implements ItemRequestService {
     private final UserService userService;
     private final ItemRequestRepository requestRepository;
@@ -37,10 +38,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ItemRequestDtoOut> getUserRequests(Long userId) {
         UserMapper.toUser(userService.findById(userId));
-        List<ItemRequest> itemRequestList = requestRepository.findAllByRequesterId(userId);
+        List<ItemRequest> itemRequestList = requestRepository.getAllByRequesterId(userId);
         return itemRequestList.stream()
                 .map(ItemRequestMapper::toRequestDtoOut)
                 .collect(Collectors.toList());
@@ -49,7 +49,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDtoOut> getAllRequests(Long userId, Integer from, Integer size) {
         UserMapper.toUser(userService.findById(userId));
-        List<ItemRequest> itemRequestList = requestRepository.findAllByRequester_IdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size));
+        List<ItemRequest> itemRequestList = requestRepository.getAllByRequesterIdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size));
         return itemRequestList.stream()
                 .map(ItemRequestMapper::toRequestDtoOut)
                 .collect(Collectors.toList());

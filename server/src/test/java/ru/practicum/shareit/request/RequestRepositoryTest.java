@@ -68,7 +68,7 @@ class RequestRepositoryTest {
 
     @Test
     void findAllByRequesterIdOrderByCreated() {
-        List<ItemRequest> requests = requestRepository.findAllByRequesterId(1L);
+        List<ItemRequest> requests = requestRepository.getAllByRequesterId(1L);
 
         assertEquals(requests.size(), 1);
         assertEquals(requests.get(0).getDescription(), "request description");
