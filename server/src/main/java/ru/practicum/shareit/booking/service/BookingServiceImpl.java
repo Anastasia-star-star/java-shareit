@@ -54,14 +54,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional
     public BookingDtoOut getBookingByUserId(Long userId, Long bookingId) {
         Booking booking = validateBookingDetails(userId, bookingId);
         return BookingMapper.toBookingOut(booking);
     }
 
     @Override
-    @Transactional
     public List<BookingDtoOut> getAll(Long bookerId, String state, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size);
         userService.findById(bookerId);
@@ -100,7 +98,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional
     public List<BookingDtoOut> getAllOwner(Long ownerId, String state, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size);
         userService.findById(ownerId);

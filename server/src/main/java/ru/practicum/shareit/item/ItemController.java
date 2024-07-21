@@ -37,7 +37,7 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDtoOut findById(@RequestHeader(USER_HEADER) Long userId,
+    public ItemDtoOut findItemById(@RequestHeader(USER_HEADER) Long userId,
                                @PathVariable("itemId")
                                Long itemId) {
         log.info("GET Запрос на получение предмета с id = {} пользователем с id = {} ", itemId, userId);
@@ -54,7 +54,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDtoOut> searchItems(@RequestHeader(USER_HEADER) Long userId,
+    public List<ItemDtoOut> search(@RequestHeader(USER_HEADER) Long userId,
                                         @RequestParam(name = "text") String text,
                                         @RequestParam(value = "from", defaultValue = "0") Integer from,
                                         @RequestParam(value = "size", defaultValue = "10") Integer size) {

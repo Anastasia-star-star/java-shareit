@@ -90,7 +90,6 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    @Transactional
     public ItemDtoOut findItemById(Long userId, Long itemId) {
         userService.findById(userId);
         Optional<Item> itemGet = itemRepository.findById(itemId);
@@ -117,7 +116,6 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    @Transactional
     public List<ItemDtoOut> findAll(Long userId, Integer from, Integer size) {
         UserDto owner = userService.findById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
@@ -150,7 +148,6 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    @Transactional
     public List<ItemDtoOut> search(Long userId, String text, Integer from, Integer size) {
         userService.findById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
